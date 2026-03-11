@@ -2,8 +2,28 @@
 
 const API_URL = window.API_CONFIG.baseUrl;
 
+function getFriendlyLoginError(response, payloadText, payloadJson) {
+    if (!API_URL) {
+        return 'Falta configurar la URL del backend. Define apiBaseUrl en static/js/config.js o abre la app con ?api_base_url=https://tu-backend.com';
+    }
+
+    const contentType = response.headers.get('content-type') || '';
+    if (!contentType.includes('application/json')) {
+        return 'El backend no respondio JSON. Verifica que apiBaseUrl apunte a tu API y no al sitio de Netlify.';
+    }
+
+    if (payloadJson && payloadJson.error) {
+        return payloadJson.error;
+    }
+
+    if (!response.ok) {
+        return 'Credenciales incorrectas o backend no disponible';
+    }
+
+    return payloadText || 'No fue posible iniciar sesion';
+}
+
 document.addEventListener("DOMContentLoaded", () => {
-    // Si ya esta autenticado, redirigir
     if (Auth.isAuthenticated()) {
         const user = Auth.getUser();
         if (user.rol === 'admin') {
@@ -33,16 +53,22 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
             body: JSON.stringify({ email, password })
         });
 
-        const data = await response.json();
+        const payloadText = await response.text();
+        let payloadJson = null;
 
-        if (!response.ok) {
-            throw new Error(data.error || 'Credenciales incorrectas');
+        try {
+            payloadJson = payloadText ? JSON.parse(payloadText) : null;
+        } catch (_) {
+            payloadJson = null;
         }
 
-        Auth.setSession(data.token, data.user);
+        if (!response.ok || !payloadJson) {
+            throw new Error(getFriendlyLoginError(response, payloadText, payloadJson));
+        }
 
-        // Redireccion basada en rol
-        if (data.user.rol === 'admin') {
+        Auth.setSession(payloadJson.token, payloadJson.user);
+
+        if (payloadJson.user.rol === 'admin') {
             window.location.href = "admin.html";
         } else {
             window.location.href = "pos.html";
@@ -56,4 +82,3 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
         btn.innerHTML = `Iniciar Sesion <i class="bi bi-box-arrow-in-right ms-1"></i>`;
     }
 });
-

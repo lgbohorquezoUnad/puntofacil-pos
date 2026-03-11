@@ -1,4 +1,4 @@
-const API_BASE_URL = "http://127.0.0.1:5000";
+const API_BASE_URL = window.API_CONFIG.baseUrl;
 
 Auth.requireAdmin();
 
@@ -192,7 +192,7 @@ function renderPurchaseOrderSummary() {
     return;
   }
 
-  summary.textContent = `Orden #${state.currentOrder.order_id} · ${state.currentOrder.supplier_name} · Estado: ${state.currentOrder.status}`;
+  summary.textContent = `Orden #${state.currentOrder.order_id} - ${state.currentOrder.supplier_name} - Estado: ${state.currentOrder.status}`;
   document.getElementById("statusOrder").textContent = `Orden activa: #${state.currentOrder.order_id} (${state.currentOrder.status}).`;
 }
 
@@ -310,7 +310,7 @@ function renderCountInfo() {
     return;
   }
 
-  info.textContent = `Conteo #${state.currentCount.count_id} · Estado: ${state.currentCount.status}`;
+  info.textContent = `Conteo #${state.currentCount.count_id} - Estado: ${state.currentCount.status}`;
   document.getElementById("statusCount").textContent = `Conteo activo: #${state.currentCount.count_id} (${state.currentCount.status}).`;
 }
 
@@ -569,7 +569,7 @@ function renderAuditLogs() {
         <td>${log.created_at || "-"}</td>
         <td>${log.module}</td>
         <td>${log.action}</td>
-        <td>${detailParts.join(" · ") || "-"}</td>
+        <td>${detailParts.join(" - ") || "-"}</td>
       </tr>
     `;
   });

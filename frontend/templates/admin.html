@@ -1,0 +1,526 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <title>PuntoFacil Admin</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #e5ebf1;
+      --panel: #f9fbfd;
+      --line: #d8e0e8;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --brand: #2563eb;
+      --brand-soft: #eff6ff;
+    }
+
+    [data-theme="dark"] {
+      --bg: #0f172a;
+      --panel: #1e293b;
+      --line: #334155;
+      --text: #f1f5f9;
+      --muted: #94a3b8;
+      --brand: #3b82f6;
+      --brand-soft: #1e293b;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: "Segoe UI", sans-serif;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    .header {
+      background: linear-gradient(90deg, var(--brand) 0%, #245c91 100%);
+      color: white;
+      padding: 14px 18px;
+      box-shadow: 0 8px 20px rgba(22, 63, 105, 0.18);
+    }
+
+    .header-bar {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .header-title {
+      font-size: 24px;
+      font-weight: 800;
+    }
+
+    .header-links {
+      display: flex;
+      gap: 10px;
+    }
+
+    .header-link {
+      color: white;
+      text-decoration: none;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.12);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .shell {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 18px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 16px;
+    }
+
+    .card {
+      border: none;
+      border-radius: 18px;
+      background: rgba(249, 251, 253, 0.96);
+      box-shadow: 0 12px 28px rgba(15, 23, 42, 0.08);
+      overflow: hidden;
+    }
+
+    .card-header {
+      border: none;
+      background: var(--panel);
+      border-bottom: 1px solid var(--line);
+      border-radius: 12px 12px 0 0;
+      font-weight: 700;
+      padding: 12px 16px;
+    }
+
+    .card-body {
+      padding: 16px;
+    }
+
+    .summary-card .card-header,
+    .products-card .card-header {
+      background: #ffffff;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .form-card .card-header {
+      background: #0f172a;
+      color: white;
+    }
+
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .stat-box {
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 14px;
+    }
+
+    .stat-label {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    .stat-value {
+      font-size: 28px;
+      font-weight: 800;
+    }
+
+    .top-list {
+      display: grid;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .top-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 10px 12px;
+    }
+
+    .top-name {
+      font-weight: 700;
+    }
+
+    .top-qty {
+      font-weight: 800;
+      color: #2563eb;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .form-group.full {
+      grid-column: 1 / -1;
+    }
+
+    .form-label {
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 6px;
+      color: #475569;
+    }
+
+    .form-control,
+    .form-select {
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      padding: 10px 12px;
+      font-size: 14px;
+      background-color: var(--panel);
+      border-color: var(--line);
+      color: var(--text);
+    }
+
+    .form-control:focus,
+    .form-select:focus {
+      background-color: var(--panel);
+      color: var(--text);
+      border-color: var(--brand);
+    }
+
+    .form-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .btn-strong {
+      border: none;
+      border-radius: 12px;
+      padding: 10px 14px;
+      font-weight: 800;
+    }
+
+    .btn-save {
+      background: #2563eb;
+      color: white;
+    }
+
+    .btn-reset {
+      background: #e2e8f0;
+      color: #0f172a;
+    }
+
+    .table-wrap {
+      max-height: 560px;
+      overflow: auto;
+    }
+
+    .table thead th {
+      position: sticky;
+      top: 0;
+      background: var(--bg);
+      z-index: 1;
+      font-size: 11px;
+      text-transform: uppercase;
+      color: var(--muted);
+      letter-spacing: .05em;
+      border: none;
+    }
+
+    .table {
+      color: var(--text);
+    }
+
+    .table td {
+      vertical-align: middle;
+    }
+
+    .product-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .mini-btn {
+      border: none;
+      border-radius: 10px;
+      padding: 8px 10px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .mini-edit {
+      background: #dbeafe;
+      color: #1d4ed8;
+    }
+
+    .mini-delete {
+      background: #fee2e2;
+      color: #b91c1c;
+    }
+
+    .feedback {
+      margin-top: 12px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 700;
+      display: none;
+    }
+
+    .feedback.success {
+      display: block;
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .feedback.error {
+      display: block;
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    .toolbar {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .toolbar .form-control {
+      max-width: 260px;
+    }
+
+    @media (max-width: 1100px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .stat-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 640px) {
+      .shell {
+        padding: 12px;
+      }
+
+      .stat-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .header-bar {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+      [data-app-mode="simple"] [data-mode="advanced"] {
+      display: none !important;
+    }
+
+    [data-app-mode="advanced"] [data-mode="simple"] {
+      display: none !important;
+    }
+
+</style>
+</head>
+
+<body>
+  <div class="header">
+    <div class="header-bar">
+      <div class="header-title"><i class="bi bi-speedometer2 me-2"></i>PuntoFacil Admin</div>
+      <div class="header-links">
+        <button id="themeToggle" class="btn btn-outline-light btn-sm rounded-pill px-3" onclick="UI.toggleTheme()">
+          <i class="bi bi-moon-fill"></i>
+        </button>
+        <button id="modeToggle" class="btn btn-light btn-sm rounded-pill px-3" onclick="UI.toggleMode()">Modo: Simple</button>
+        <button class="btn btn-danger btn-sm rounded-pill px-3" onclick="Auth.logout()"><i
+            class="bi bi-box-arrow-right me-1"></i>Salir</button>
+        <a class="header-link" href="/frontend/templates/pos.html">Ir al POS</a>
+        <a class="header-link" href="/frontend/templates/inventory.html">Inventario</a>
+        <a class="header-link" href="/frontend/templates/operativa.html">Operativa</a>
+        <a class="header-link" href="#productsSection">Productos</a>
+        <a class="header-link" href="#usersSection">Usuarios</a>
+      </div>
+    </div>
+
+    <div class="shell">
+      <div class="grid">
+        <div>
+          <div class="card summary-card mb-3">
+            <div class="card-header">Resumen del dia</div>
+            <div class="card-body">
+              <div class="stat-grid">
+                <div class="stat-box">
+                  <div class="stat-label">Ventas de hoy</div>
+                  <div class="stat-value" id="todaySalesCount">0</div>
+                </div>
+                <div class="stat-box">
+                  <div class="stat-label">Total vendido</div>
+                  <div class="stat-value" id="todaySalesTotal">$0</div>
+                </div>
+                <div class="stat-box">
+                  <div class="stat-label">Unidades vendidas</div>
+                  <div class="stat-value" id="todayItemsSold">0</div>
+                </div>
+                <div class="stat-box">
+                  <div class="stat-label">Stock bajo</div>
+                  <div class="stat-value" id="lowStockCount">0</div>
+                </div>
+              </div>
+              <div class="top-list" id="topProducts"></div>
+            </div>
+          </div>
+
+          <div class="card products-card" id="productsSection">
+            <div class="card-header">Productos registrados</div>
+            <div class="card-body">
+              <div class="toolbar">
+                <input id="adminProductSearch" class="form-control" placeholder="Buscar producto..."
+                  onkeyup="filterAdminProducts()">
+              </div>
+              <div class="table-wrap">
+                <table class="table table-hover align-middle">
+                  <thead>
+                    <tr>
+                      <th>Producto</th>
+                      <th>Categoria</th>
+                      <th>Precio</th>
+                      <th>Stock</th>
+                      <th>Codigo</th>
+                      <th>Acciones</th>
+                    </tr>
+                  </thead>
+                  <tbody id="adminProductsTable"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <div class="card products-card mt-3" id="usersSection" data-mode="advanced">
+            <div class="card-header">Usuarios registrados</div>
+            <div class="card-body">
+              <div class="table-wrap">
+                <table class="table table-hover align-middle">
+                  <thead>
+                    <tr>
+                      <th>Nombre</th>
+                      <th>Email</th>
+                      <th>Rol</th>
+                      <th>Acciones</th>
+                    </tr>
+                  </thead>
+                  <tbody id="adminUsersTable"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="card form-card">
+            <div class="card-header">Gestion de producto</div>
+            <div class="card-body">
+              <form id="productForm" onsubmit="submitProductForm(event)">
+                <input type="hidden" id="productId">
+                <div class="form-grid">
+                  <div class="form-group full">
+                    <label class="form-label">Nombre</label>
+                    <input id="productName" class="form-control" required>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Categoria</label>
+                    <select id="productCategory" class="form-select" required></select>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Codigo de barras</label>
+                    <input id="productBarcode" class="form-control">
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Precio de venta</label>
+                    <input id="productPrice" type="number" step="0.01" min="0" class="form-control" required>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Stock</label>
+                    <input id="productStock" type="number" min="0" class="form-control" required>
+                  </div>
+                </div>
+                <div class="form-actions">
+                  <button class="btn-strong btn-save" type="submit" id="submitButton">Guardar producto</button>
+                  <button class="btn-strong btn-reset" type="button" onclick="resetProductForm()">Limpiar</button>
+                </div>
+              </form>
+              <div id="formFeedback" class="feedback"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card form-card mt-3" data-mode="advanced">
+          <div class="card-header">Gestion de usuario</div>
+          <div class="card-body">
+            <form id="userForm">
+              <div class="form-grid">
+                <div class="form-group full">
+                  <label class="form-label">Nombre</label>
+                  <input id="userName" class="form-control" required>
+                </div>
+                <div class="form-group full">
+                  <label class="form-label">Email</label>
+                  <input id="userEmail" type="email" class="form-control" required autocomplete="new-email">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">ContraseÃ±a</label>
+                  <input id="userPassword" type="password" class="form-control" required autocomplete="new-password">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Rol</label>
+                  <select id="userRole" class="form-select" required>
+                    <option value="cajero">Cajero</option>
+                    <option value="admin">Administrador</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-actions">
+                <button class="btn-strong btn-save" type="submit" id="submitUserButton">Crear usuario</button>
+                <button class="btn-strong btn-reset" type="button" onclick="resetUserForm()">Limpiar</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="../static/js/ui.js"></script>
+  <script src="../static/js/auth.js"></script>
+  <script src="../static/js/admin.js"></script>
+</body>
+
+</html>
+
+
+
+
+
+

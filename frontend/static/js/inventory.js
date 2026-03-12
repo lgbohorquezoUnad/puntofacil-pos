@@ -150,7 +150,7 @@ function renderExpiringBatches() {
   tbody.innerHTML = ""
 
   if (!state.expiringBatches.length) {
-    tbody.innerHTML = '<tr><td colspan="4" class="text-center text-muted py-2">Sin lotes próximos a vencer</td></tr>'
+    tbody.innerHTML = '<tr><td colspan="4" class="text-center text-muted py-2">Sin lotes proximos a vencer</td></tr>'
     return
   }
 
@@ -392,3 +392,4 @@ async function initInventoryScreen() {
 
 window.openAdjustModal = openAdjustModal
 initInventoryScreen()
+

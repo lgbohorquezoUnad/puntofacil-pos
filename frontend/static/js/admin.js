@@ -220,7 +220,7 @@ async function submitProductForm(event) {
 }
 
 async function deleteProduct(productId) {
-  const confirmation = await UI.confirm("¿Deseas eliminar este producto?");
+  const confirmation = await UI.confirm("Deseas eliminar este producto?");
   if (!confirmation.isConfirmed) {
     return;
   }
@@ -315,7 +315,7 @@ async function submitUserForm(event) {
 }
 
 async function deleteUser(id) {
-  const confirmation = await UI.confirm("¿Deseas eliminar a este usuario?");
+  const confirmation = await UI.confirm("Deseas eliminar a este usuario?");
   if (!confirmation.isConfirmed) {
     return;
   }
@@ -361,4 +361,5 @@ window.deleteProduct = deleteProduct;
 window.deleteUser = deleteUser;
 
 window.resetUserForm = resetUserForm;
+
 

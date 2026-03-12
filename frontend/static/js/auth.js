@@ -36,7 +36,7 @@ const Auth = {
 
     requireAuth() {
         if (!this.isAuthenticated()) {
-            window.location.href = "login.html";
+            window.location.href = "/login";
         }
     },
 
@@ -44,7 +44,7 @@ const Auth = {
         this.requireAuth();
         if (!this.isAdmin()) {
             // Un administrador puede ir a pos, pero un cajero no puede ir a admin
-            window.location.href = "pos.html";
+            window.location.href = "/pos";
         }
     },
 
@@ -67,7 +67,7 @@ const Auth = {
         // If unauthorized because token expired or invalid
         if (response.status === 401 || response.status === 422) {
             this.clearSession();
-            window.location.href = "login.html";
+            window.location.href = "/login";
             throw new Error('Session expired');
         }
 
@@ -76,7 +76,7 @@ const Auth = {
 
     logout() {
         this.clearSession();
-        window.location.href = "login.html";
+        window.location.href = "/login";
     }
 };
 

@@ -1,4 +1,4 @@
-// File: frontend/static/js/login.js
+﻿// File: frontend/static/js/login.js
 
 const API_URL = window.API_CONFIG.baseUrl;
 
@@ -27,9 +27,9 @@ document.addEventListener("DOMContentLoaded", () => {
     if (Auth.isAuthenticated()) {
         const user = Auth.getUser();
         if (user.rol === 'admin') {
-            window.location.href = "admin.html";
+            window.location.href = "/admin";
         } else {
-            window.location.href = "pos.html";
+            window.location.href = "/pos";
         }
     }
 });
@@ -69,13 +69,16 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
         Auth.setSession(payloadJson.token, payloadJson.user);
 
         if (payloadJson.user.rol === 'admin') {
-            window.location.href = "admin.html";
+            window.location.href = "/admin";
         } else {
-            window.location.href = "pos.html";
+            window.location.href = "/pos";
         }
 
     } catch (error) {
-        errorDiv.textContent = error.message;
+        const message = error.message === 'Failed to fetch'
+            ? 'No se pudo conectar con el backend. Verifica la URL del API y la configuracion CORS.'
+            : error.message;
+        errorDiv.textContent = message;
         errorDiv.style.display = 'block';
     } finally {
         btn.disabled = false;

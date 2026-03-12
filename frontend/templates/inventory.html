@@ -234,9 +234,9 @@
         <button id="modeToggle" class="btn btn-sm btn-light" onclick="UI.toggleMode()">Modo: Simple</button>
         <button class="btn btn-danger btn-sm" onclick="Auth.logout()"><i
             class="bi bi-box-arrow-right me-1"></i>Salir</button>
-        <a class="btn btn-light btn-sm" href="pos.html">Ir al POS</a>
-        <a class="btn btn-outline-light btn-sm" href="operativa.html">Operativa</a>
-        <a class="btn btn-outline-light btn-sm" href="admin.html">Volver a Admin</a>
+        <a class="btn btn-light btn-sm" href="/pos">Ir al POS</a>
+        <a class="btn btn-outline-light btn-sm" href="/operativa">Operativa</a>
+        <a class="btn btn-outline-light btn-sm" href="/admin">Volver a Admin</a>
       </div>
     </div>
   </div>
@@ -337,7 +337,13 @@
       </div>
     </div>
 
-    <div class="panel-right">\r\n      <div class="card" data-mode="simple">\r\n        <div class="card-header">Modo simple</div>\r\n        <div class="card-body">\r\n          <div class="text-muted small">Indicadores avanzados estan ocultos. Activa Modo Avanzado para ver analitica y bitacoras.</div>\r\n        </div>\r\n      </div>
+    <div class="panel-right">
+      <div class="card" data-mode="simple">
+        <div class="card-header">Modo simple</div>
+        <div class="card-body">
+          <div class="text-muted small">Indicadores avanzados estan ocultos. Activa Modo Avanzado para ver analitica y bitacoras.</div>
+        </div>
+      </div>
       <div class="card">
         <div class="card-header">Bitacora de movimientos</div>
         <div class="card-body">
@@ -465,6 +471,8 @@
 </body>
 
 </html>
+
+
 
 
 

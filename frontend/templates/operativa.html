@@ -212,14 +212,24 @@
         </button>
         <button id="modeToggle" class="btn btn-sm btn-light" onclick="UI.toggleMode()">Modo: Simple</button>
         <button class="btn btn-danger btn-sm" onclick="Auth.logout()"><i class="bi bi-box-arrow-right me-1"></i>Salir</button>
-        <a class="btn btn-light btn-sm" href="pos.html">Ir al POS</a>
-        <a class="btn btn-outline-light btn-sm" href="inventory.html">Inventario</a>
-        <a class="btn btn-outline-light btn-sm" href="admin.html">Admin</a>
+        <a class="btn btn-light btn-sm" href="/pos">Ir al POS</a>
+        <a class="btn btn-outline-light btn-sm" href="/inventory">Inventario</a>
+        <a class="btn btn-outline-light btn-sm" href="/admin">Admin</a>
       </div>
     </div>
   </div>
 
-  <div class="shell" data-mode="simple">\r\n    <div class="card">\r\n      <div class="card-header">Modo simple</div>\r\n      <div class="card-body">\r\n        <p class="mb-2">Esta pantalla contiene funciones avanzadas de control operativo.</p>\r\n        <p class="mb-0 text-muted">Activa el modo avanzado para ver compras, transferencias, conteos y auditoria.</p>\r\n      </div>\r\n    </div>\r\n  </div>\r\n\r\n  <div class="shell" data-mode="advanced">
+  <div class="shell" data-mode="simple">
+    <div class="card">
+      <div class="card-header">Modo simple</div>
+      <div class="card-body">
+        <p class="mb-2">Esta pantalla contiene funciones avanzadas de control operativo.</p>
+        <p class="mb-0 text-muted">Activa el modo avanzado para ver compras, transferencias, conteos y auditoria.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="shell" data-mode="advanced">
     <div class="stack">
       <div class="card">
         <div class="card-header">
@@ -373,7 +383,7 @@
             </div>
             <div class="col-md-8">
               <label class="form-label">Motivo / observaciones</label>
-              <input id="countReason" class="form-control" placeholder="Ej: ajuste por conteo físico">
+              <input id="countReason" class="form-control" placeholder="Ej: ajuste por conteo fisico">
             </div>
             <div class="col-md-4 d-flex align-items-end">
               <button id="countReconcileBtn" class="btn btn-success w-100 action-btn"><i class="bi bi-check2-circle me-1"></i>Cerrar conteo</button>
@@ -498,6 +508,8 @@
 </body>
 
 </html>
+
+
 
 
 

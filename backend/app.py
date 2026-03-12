@@ -1,3 +1,5 @@
+import os
+
 from flask import Flask
 from flask_cors import CORS
 from flask_mysqldb import MySQL
@@ -13,7 +15,17 @@ from routes.user_routes import init_user_routes
 app = Flask(__name__)
 app.config.from_object(Config)
 
-CORS(app)
+frontend_url = os.getenv("FRONTEND_URL", "").strip()
+cors_origins = [
+    "http://localhost:5500",
+    "http://127.0.0.1:5500",
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+]
+if frontend_url:
+    cors_origins.append(frontend_url)
+
+CORS(app, resources={r"/api/*": {"origins": cors_origins}})
 jwt = JWTManager(app)
 
 mysql = MySQL(app)
@@ -33,9 +45,15 @@ app.register_blueprint(cash_register_routes)
 user_routes = init_user_routes(mysql)
 app.register_blueprint(user_routes)
 
+
 @app.route("/")
 def home():
     return {"mensaje": "PuntoFacil POS API"}
 
+
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(
+        host="0.0.0.0",
+        port=int(os.getenv("PORT", "5000")),
+        debug=os.getenv("FLASK_DEBUG", "true").lower() == "true"
+    )

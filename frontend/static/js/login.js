@@ -1,4 +1,4 @@
-﻿// File: frontend/static/js/login.js
+// File: frontend/static/js/login.js
 
 const API_URL = window.API_CONFIG.baseUrl;
 
@@ -82,6 +82,7 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
         errorDiv.style.display = 'block';
     } finally {
         btn.disabled = false;
-        btn.innerHTML = `Iniciar Sesion <i class="bi bi-box-arrow-in-right ms-1"></i>`;
+        btn.innerHTML = `Iniciar sesion <i class="bi bi-box-arrow-in-right ms-1"></i>`;
     }
 });
+

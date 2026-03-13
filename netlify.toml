@@ -1,5 +1,35 @@
-[build]
+﻿[build]
   publish = "frontend"
+
+[[redirects]]
+  from = "/"
+  to = "/templates/login.html"
+  status = 200
+
+[[redirects]]
+  from = "/login"
+  to = "/templates/login.html"
+  status = 200
+
+[[redirects]]
+  from = "/pos"
+  to = "/templates/pos.html"
+  status = 200
+
+[[redirects]]
+  from = "/admin"
+  to = "/templates/admin.html"
+  status = 200
+
+[[redirects]]
+  from = "/inventory"
+  to = "/templates/inventory.html"
+  status = 200
+
+[[redirects]]
+  from = "/operativa"
+  to = "/templates/operativa.html"
+  status = 200
 
 [[redirects]]
   from = "/frontend/*"

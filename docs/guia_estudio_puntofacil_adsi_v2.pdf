@@ -1,0 +1,1081 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+2 0 obj
+<< /Length 2115 >>
+stream
+BT
+/F1 11 Tf
+50 790 Td
+15 TL
+(?) Tj
+T*
+() Tj
+T*
+(Guia de estudio PuntoFacil POS - Version 2) Tj
+T*
+() Tj
+T*
+(Guia de estudio de la aplicacion PuntoFacil POS) Tj
+T*
+() Tj
+T*
+(Version 2 - material de apoyo para ADSI del SENA) Tj
+T*
+() Tj
+T*
+(1. Presentacion) Tj
+T*
+() Tj
+T*
+(Esta version 2 fue escrita con un enfoque mas academico y explicativo. Su finalidad es) Tj
+T*
+(ayudarte a estudiar programacion de software a partir de un proyecto real. En lugar de) Tj
+T*
+(limitarse a nombrar archivos, esta guia explica la razon de ser de cada modulo, la relacion) Tj
+T*
+(entre las capas del sistema y los conceptos tecnicos que puedes fortalecer como estudiante) Tj
+T*
+(de ADSI.) Tj
+T*
+() Tj
+T*
+(La aplicacion analizada es PuntoFacil POS, un sistema web orientado a punto de venta,) Tj
+T*
+(administracion, caja e inventario. Al estudiar este proyecto puedes ver claramente como se) Tj
+T*
+(construye una solucion empresarial completa, desde la interfaz del usuario hasta la) Tj
+T*
+(persistencia en base de datos.) Tj
+T*
+() Tj
+T*
+(2. Objetivo academico de la guia) Tj
+T*
+() Tj
+T*
+(- Explicar como funciona la aplicacion de forma clara y precisa.) Tj
+T*
+() Tj
+T*
+(- Describir los programas, lenguajes y librerias utilizados.) Tj
+T*
+() Tj
+T*
+(- Identificar el contenido de cada carpeta y el proposito de sus archivos.) Tj
+T*
+() Tj
+T*
+(- Relacionar el proyecto con conceptos clave de ADSI.) Tj
+T*
+() Tj
+T*
+(- Servir como ejemplo de estudio para complementar tus clases y practicas.) Tj
+T*
+() Tj
+T*
+(3. Descripcion general del sistema) Tj
+T*
+() Tj
+T*
+(PuntoFacil POS es un sistema web que permite manejar procesos operativos y administrativos) Tj
+T*
+(de un negocio. No se trata solamente de vender productos; tambien incorpora seguridad,) Tj
+T*
+(control de inventario, trazabilidad y apoyo a decisiones operativas.) Tj
+T*
+() Tj
+T*
+(Entre las funciones principales del sistema se encuentran:) Tj
+T*
+() Tj
+T*
+(- Inicio de sesion con usuarios del sistema.) Tj
+T*
+() Tj
+T*
+(- Control por roles: administrador y cajero.) Tj
+T*
+() Tj
+T*
+(- Registro de ventas desde una interfaz POS.) Tj
+T*
+() Tj
+T*
+(- Apertura y cierre de caja.) Tj
+ET
+endstream
+endobj
+3 0 obj
+<< /Type /Page /Parent 4 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 1 0 R >> >> /Contents 2 0 R >>
+endobj
+4 0 obj
+<< /Length 1670 >>
+stream
+BT
+/F1 11 Tf
+50 790 Td
+15 TL
+() Tj
+T*
+(- Administracion de productos.) Tj
+T*
+() Tj
+T*
+(- Administracion de usuarios.) Tj
+T*
+() Tj
+T*
+(- Control de inventario con movimientos historicos.) Tj
+T*
+() Tj
+T*
+(- Sugerencias de reposicion de stock.) Tj
+T*
+() Tj
+T*
+(- Control de lotes proximos a vencer.) Tj
+T*
+() Tj
+T*
+(- Ordenes de compra y recepcion de mercancia.) Tj
+T*
+() Tj
+T*
+(- Conteos fisicos y conciliacion de inventario.) Tj
+T*
+() Tj
+T*
+(- Transferencias entre ubicaciones.) Tj
+T*
+() Tj
+T*
+(- Registros de auditoria.) Tj
+T*
+() Tj
+T*
+(4. Arquitectura del proyecto) Tj
+T*
+() Tj
+T*
+(La aplicacion sigue una arquitectura por capas. Esto es muy importante en ADSI porque) Tj
+T*
+(enseña a separar responsabilidades. Cada capa cumple una tarea concreta y evita mezclar) Tj
+T*
+(toda la logica en un solo archivo.) Tj
+T*
+() Tj
+T*
+(Flujo general: Usuario -> Interfaz web -> API Flask -> Routes -> Controllers -> Models ->) Tj
+T*
+(MySQL) Tj
+T*
+() Tj
+T*
+(- Frontend: es la parte visual que usa el usuario.) Tj
+T*
+() Tj
+T*
+(- Routes: mapean URL a funciones.) Tj
+T*
+() Tj
+T*
+(- Controllers: validan datos, revisan permisos y coordinan la logica.) Tj
+T*
+() Tj
+T*
+(- Models: ejecutan sentencias SQL y manipulan datos.) Tj
+T*
+() Tj
+T*
+(- Base de datos: almacena de forma persistente la informacion.) Tj
+T*
+() Tj
+T*
+(En terminos de analisis y diseño, esta organizacion mejora el mantenimiento, la) Tj
+T*
+(escalabilidad y la claridad del codigo.) Tj
+T*
+() Tj
+T*
+(5. Programas, lenguajes y librerias utilizadas) Tj
+T*
+() Tj
+T*
+(5.1 Lenguajes) Tj
+T*
+() Tj
+T*
+(- Python: lenguaje principal del backend.) Tj
+T*
+() Tj
+T*
+(- JavaScript: controla la logica del frontend en el navegador.) Tj
+ET
+endstream
+endobj
+5 0 obj
+<< /Type /Page /Parent 6 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 1 0 R >> >> /Contents 4 0 R >>
+endobj
+6 0 obj
+<< /Length 1644 >>
+stream
+BT
+/F1 11 Tf
+50 790 Td
+15 TL
+() Tj
+T*
+(- HTML: define la estructura de las interfaces.) Tj
+T*
+() Tj
+T*
+(- CSS: da estilo visual a la aplicacion.) Tj
+T*
+() Tj
+T*
+(- SQL: se usa para crear tablas, relaciones y consultas de MySQL.) Tj
+T*
+() Tj
+T*
+(5.2 Librerias del backend) Tj
+T*
+() Tj
+T*
+(- Flask: framework web ligero que permite crear endpoints y servir archivos.) Tj
+T*
+() Tj
+T*
+(- flask-cors: autoriza la comunicacion entre frontend y backend cuando estan en dominios) Tj
+T*
+(diferentes.) Tj
+T*
+() Tj
+T*
+(- flask-mysqldb: conecta la aplicacion con MySQL.) Tj
+T*
+() Tj
+T*
+(- flask-bcrypt: protege contrasenas usando hash.) Tj
+T*
+() Tj
+T*
+(- flask-jwt-extended: implementa autenticacion basada en tokens JWT.) Tj
+T*
+() Tj
+T*
+(- gunicorn: servidor WSGI usado para despliegue en produccion.) Tj
+T*
+() Tj
+T*
+(5.3 Librerias del frontend) Tj
+T*
+() Tj
+T*
+(- Bootstrap 5: acelera la construccion de pantallas adaptables.) Tj
+T*
+() Tj
+T*
+(- Bootstrap Icons: provee iconos.) Tj
+T*
+() Tj
+T*
+(- SweetAlert2: mejora la presentacion de mensajes y confirmaciones.) Tj
+T*
+() Tj
+T*
+(5.4 Herramientas y entorno) Tj
+T*
+() Tj
+T*
+(- MySQL: gestor de base de datos relacional.) Tj
+T*
+() Tj
+T*
+(- VS Code: editor sugerido por la configuracion local del proyecto.) Tj
+T*
+() Tj
+T*
+(- venv: entorno virtual para aislar dependencias Python.) Tj
+T*
+() Tj
+T*
+(- Render: plataforma usada para desplegar la API.) Tj
+T*
+() Tj
+T*
+(- Netlify: plataforma usada para desplegar el frontend.) Tj
+T*
+() Tj
+T*
+(6. Estructura general de carpetas) Tj
+T*
+() Tj
+T*
+(- backend/: logica del servidor.) Tj
+T*
+() Tj
+T*
+(- frontend/: vistas, scripts y estilos de la interfaz.) Tj
+T*
+() Tj
+ET
+endstream
+endobj
+7 0 obj
+<< /Type /Page /Parent 8 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 1 0 R >> >> /Contents 6 0 R >>
+endobj
+8 0 obj
+<< /Length 1717 >>
+stream
+BT
+/F1 11 Tf
+50 790 Td
+15 TL
+(- database/: scripts SQL y migraciones.) Tj
+T*
+() Tj
+T*
+(- docs/: documentacion y material de estudio.) Tj
+T*
+() Tj
+T*
+(- .vscode/: configuracion del editor.) Tj
+T*
+() Tj
+T*
+(- venv/: entorno virtual.) Tj
+T*
+() Tj
+T*
+(- .git/: repositorio de control de versiones.) Tj
+T*
+() Tj
+T*
+(7. Analisis de la carpeta backend) Tj
+T*
+() Tj
+T*
+(7.1 Archivo principal) Tj
+T*
+() Tj
+T*
+(app.py es el corazon del backend. En este archivo se crea la aplicacion Flask, se cargan) Tj
+T*
+(los parametros de configuracion y se registran los modulos de rutas.) Tj
+T*
+() Tj
+T*
+(Funciones academicamente importantes que se observan aqui:) Tj
+T*
+() Tj
+T*
+(- Inicializacion de un framework web.) Tj
+T*
+() Tj
+T*
+(- Carga de configuracion por variables de entorno.) Tj
+T*
+() Tj
+T*
+(- Integracion con JWT y MySQL.) Tj
+T*
+() Tj
+T*
+(- Definicion de rutas visuales como /login, /pos y /admin.) Tj
+T*
+() Tj
+T*
+(- Habilitacion de CORS para soportar frontend y backend separados.) Tj
+T*
+() Tj
+T*
+(7.2 Configuracion) Tj
+T*
+() Tj
+T*
+(config.py concentra parametros sensibles como claves secretas y datos de MySQL. Esto enseña) Tj
+T*
+(una buena practica: separar configuracion del codigo fuente.) Tj
+T*
+() Tj
+T*
+(7.3 Utilidades del backend) Tj
+T*
+() Tj
+T*
+(- requirements.txt: muestra las dependencias de Python.) Tj
+T*
+() Tj
+T*
+(- generate_password.py: genera hashes para contrasenas.) Tj
+T*
+() Tj
+T*
+(- fix_admin_hash.py: permite actualizar el hash del administrador.) Tj
+T*
+() Tj
+T*
+(- api_stdout.log y api_stderr.log: sirven para depuracion.) Tj
+T*
+() Tj
+T*
+(7.4 Carpeta backend/routes) Tj
+T*
+() Tj
+T*
+(Las rutas no contienen toda la logica; su funcion es enrutar la solicitud hacia el) Tj
+T*
+(controlador correcto.) Tj
+ET
+endstream
+endobj
+9 0 obj
+<< /Type /Page /Parent 10 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 1 0 R >> >> /Contents 8 0 R >>
+endobj
+10 0 obj
+<< /Length 2058 >>
+stream
+BT
+/F1 11 Tf
+50 790 Td
+15 TL
+() Tj
+T*
+(- auth_routes.py: endpoint de login.) Tj
+T*
+() Tj
+T*
+(- product_routes.py: endpoints de productos, categorias, inventario y operaciones avanzadas.) Tj
+T*
+() Tj
+T*
+(- sale_routes.py: endpoint para registrar ventas.) Tj
+T*
+() Tj
+T*
+(- cash_register_routes.py: endpoints de caja.) Tj
+T*
+() Tj
+T*
+(- user_routes.py: endpoints CRUD de usuarios.) Tj
+T*
+() Tj
+T*
+(7.5 Carpeta backend/controllers) Tj
+T*
+() Tj
+T*
+(Esta capa es ideal para estudiar validacion, reglas de acceso y coordinacion del negocio.) Tj
+T*
+() Tj
+T*
+(- auth_controller.py: verifica usuario, estado y contrasena; genera JWT.) Tj
+T*
+() Tj
+T*
+(- product_controller.py: entrega productos y categorias, y permite crear, actualizar o) Tj
+T*
+(eliminar productos.) Tj
+T*
+() Tj
+T*
+(- sale_controller.py: valida el carrito y el metodo de pago antes de enviar la venta al) Tj
+T*
+(modelo.) Tj
+T*
+() Tj
+T*
+(- cash_register_controller.py: controla apertura y cierre de caja.) Tj
+T*
+() Tj
+T*
+(- inventory_controller.py: administra filtros, resumenes y ajustes de inventario.) Tj
+T*
+() Tj
+T*
+(- advanced_inventory_controller.py: maneja procesos mas completos como compras, conteos,) Tj
+T*
+(auditoria y transferencias.) Tj
+T*
+() Tj
+T*
+(- user_controller.py: administra usuarios y valida que el actor sea administrador.) Tj
+T*
+() Tj
+T*
+(7.6 Carpeta backend/models) Tj
+T*
+() Tj
+T*
+(Los modelos representan la capa de acceso a datos. Aqui es donde se entiende mejor como una) Tj
+T*
+(aplicacion conversa con MySQL.) Tj
+T*
+() Tj
+T*
+(- user_model.py: consultas sobre usuarios.) Tj
+T*
+() Tj
+T*
+(- product_model.py: consultas y operaciones sobre productos y categorias.) Tj
+T*
+() Tj
+T*
+(- sale_model.py: registra ventas usando transacciones; valida caja abierta y stock.) Tj
+T*
+() Tj
+T*
+(- cash_register_model.py: maneja la tabla de cajas y calcula diferencias de cierre.) Tj
+T*
+() Tj
+T*
+(- inventory_model.py: resume el inventario, aplica ajustes y registra movimientos.) Tj
+T*
+() Tj
+T*
+(- advanced_inventory_model.py: contiene procesos empresariales avanzados con multiples) Tj
+ET
+endstream
+endobj
+11 0 obj
+<< /Type /Page /Parent 12 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 1 0 R >> >> /Contents 10 0 R >>
+endobj
+12 0 obj
+<< /Length 1881 >>
+stream
+BT
+/F1 11 Tf
+50 790 Td
+15 TL
+(tablas relacionadas.) Tj
+T*
+() Tj
+T*
+(8. Analisis de la carpeta frontend) Tj
+T*
+() Tj
+T*
+(El frontend es la parte que interactua directamente con el usuario. Aunque no usa) Tj
+T*
+(frameworks modernos como React o Vue, resulta muy valioso para estudiar JavaScript puro,) Tj
+T*
+(manipulación del DOM y consumo de APIs con fetch.) Tj
+T*
+() Tj
+T*
+(8.1 Archivos HTML) Tj
+T*
+() Tj
+T*
+(- index.html: redirige a login.) Tj
+T*
+() Tj
+T*
+(- login.html: formulario de autenticacion.) Tj
+T*
+() Tj
+T*
+(- pos.html: interfaz de caja y ventas.) Tj
+T*
+() Tj
+T*
+(- admin.html: panel administrativo.) Tj
+T*
+() Tj
+T*
+(- inventory.html: panel de control de inventario.) Tj
+T*
+() Tj
+T*
+(- operativa.html: panel de operaciones avanzadas.) Tj
+T*
+() Tj
+T*
+(8.2 Scripts JavaScript) Tj
+T*
+() Tj
+T*
+(- config.js: resuelve la URL de la API segun el entorno.) Tj
+T*
+() Tj
+T*
+(- auth.js: guarda el token, recupera la sesion, valida roles y protege rutas del frontend.) Tj
+T*
+() Tj
+T*
+(- login.js: controla el envio del formulario de autenticacion.) Tj
+T*
+() Tj
+T*
+(- pos.js: administra productos, carrito, metodos de pago, caja y checkout.) Tj
+T*
+() Tj
+T*
+(- admin.js: administra dashboard, productos y usuarios.) Tj
+T*
+() Tj
+T*
+(- inventory.js: consulta KPIs, movimientos y widgets de alto impacto.) Tj
+T*
+() Tj
+T*
+(- operativa.js: gestiona compras, recepcion, conteos, transferencias y auditoria.) Tj
+T*
+() Tj
+T*
+(- ui.js: encapsula toasts, alertas, tema visual y modo simple o avanzado.) Tj
+T*
+() Tj
+T*
+(8.3 CSS compartido) Tj
+T*
+() Tj
+T*
+(app-shell.css contiene estilos base comunes. Desde el punto de vista del diseño de) Tj
+T*
+(software, esto evita repetir reglas visuales y ayuda a mantener coherencia entre pantallas.) Tj
+T*
+() Tj
+T*
+(9. Analisis de la carpeta database) Tj
+T*
+() Tj
+T*
+(La carpeta database muestra como evoluciona un sistema de informacion a traves de) Tj
+ET
+endstream
+endobj
+13 0 obj
+<< /Type /Page /Parent 14 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 1 0 R >> >> /Contents 12 0 R >>
+endobj
+14 0 obj
+<< /Length 1677 >>
+stream
+BT
+/F1 11 Tf
+50 790 Td
+15 TL
+(migraciones. Esto es importante porque en la vida real una base de datos no se queda) Tj
+T*
+(estatica: crece con las necesidades del negocio.) Tj
+T*
+() Tj
+T*
+(- schema.sql: base de ventas, detalle, caja y movimientos de inventario.) Tj
+T*
+() Tj
+T*
+(- migration_users.sql: usuarios y administrador inicial.) Tj
+T*
+() Tj
+T*
+(- migration_user_status.sql: agrega estado activo/inactivo.) Tj
+T*
+() Tj
+T*
+(- migration_add_cash_register.sql: integra caja con ventas.) Tj
+T*
+() Tj
+T*
+(- migration_inventory_control.sql: agrega stock minimo y trazabilidad.) Tj
+T*
+() Tj
+T*
+(- migration_high_impact.sql: agrega modulo avanzado de inventario.) Tj
+T*
+() Tj
+T*
+(10. Funcionamiento detallado del sistema) Tj
+T*
+() Tj
+T*
+(10.1 Autenticacion) Tj
+T*
+() Tj
+T*
+(- El usuario digita correo y contrasena en login.html.) Tj
+T*
+() Tj
+T*
+(- login.js envia la solicitud POST /api/login.) Tj
+T*
+() Tj
+T*
+(- auth_controller.py recibe los datos y consulta el usuario.) Tj
+T*
+() Tj
+T*
+(- La contrasena se compara con bcrypt.) Tj
+T*
+() Tj
+T*
+(- Si es correcta, se crea un token JWT.) Tj
+T*
+() Tj
+T*
+(- El frontend guarda la sesion en localStorage.) Tj
+T*
+() Tj
+T*
+(10.2 Consulta y filtrado de productos) Tj
+T*
+() Tj
+T*
+(- La interfaz llama a /api/products y /api/categories.) Tj
+T*
+() Tj
+T*
+(- El controlador verifica autenticacion.) Tj
+T*
+() Tj
+T*
+(- El modelo consulta MySQL y devuelve datos serializados.) Tj
+T*
+() Tj
+T*
+(- El frontend construye tarjetas, tablas y filtros.) Tj
+T*
+() Tj
+T*
+(10.3 Registro de ventas) Tj
+T*
+() Tj
+T*
+(- El usuario arma un carrito en pos.js.) Tj
+T*
+() Tj
+T*
+(- Selecciona metodo de pago.) Tj
+T*
+() Tj
+T*
+(- El sistema exige caja abierta.) Tj
+ET
+endstream
+endobj
+15 0 obj
+<< /Type /Page /Parent 16 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 1 0 R >> >> /Contents 14 0 R >>
+endobj
+16 0 obj
+<< /Length 1643 >>
+stream
+BT
+/F1 11 Tf
+50 790 Td
+15 TL
+() Tj
+T*
+(- La API valida los datos.) Tj
+T*
+() Tj
+T*
+(- El modelo realiza una transaccion SQL.) Tj
+T*
+() Tj
+T*
+(- Se insertan encabezado y detalle de la venta.) Tj
+T*
+() Tj
+T*
+(- Se descuenta stock de cada producto.) Tj
+T*
+() Tj
+T*
+(Este flujo es excelente para estudiar integridad transaccional.) Tj
+T*
+() Tj
+T*
+(10.4 Apertura y cierre de caja) Tj
+T*
+() Tj
+T*
+(- El usuario define un monto inicial.) Tj
+T*
+() Tj
+T*
+(- La API crea un registro en la tabla cajas.) Tj
+T*
+() Tj
+T*
+(- Al cerrar, el sistema suma las ventas asociadas.) Tj
+T*
+() Tj
+T*
+(- Calcula monto esperado, monto contado y diferencia.) Tj
+T*
+() Tj
+T*
+(10.5 Inventario) Tj
+T*
+() Tj
+T*
+(El inventario no solo muestra stock. Tambien calcula resumenes, detecta agotados, productos) Tj
+T*
+(bajos y valor monetario del inventario. Ademas, registra cada ajuste en una tabla) Tj
+T*
+(historica, lo cual aporta trazabilidad.) Tj
+T*
+() Tj
+T*
+(10.6 Operaciones avanzadas) Tj
+T*
+() Tj
+T*
+(La pantalla operativa concentra procesos mas cercanos a un ERP o sistema empresarial:) Tj
+T*
+() Tj
+T*
+(- Generacion de ordenes de compra.) Tj
+T*
+() Tj
+T*
+(- Recepcion parcial o total de mercancia.) Tj
+T*
+() Tj
+T*
+(- Registro de fechas de vencimiento por lote.) Tj
+T*
+() Tj
+T*
+(- Conteos fisicos y conciliacion.) Tj
+T*
+() Tj
+T*
+(- Transferencias entre sucursales o bodegas.) Tj
+T*
+() Tj
+T*
+(- Auditoria de acciones realizadas.) Tj
+T*
+() Tj
+T*
+(11. Que aprende un estudiante de ADSI con cada modulo) Tj
+T*
+() Tj
+T*
+(- Login: autenticacion, hash de contrasenas, sesiones y seguridad.) Tj
+T*
+() Tj
+T*
+(- POS: carrito, formularios, eventos y operaciones transaccionales.) Tj
+ET
+endstream
+endobj
+17 0 obj
+<< /Type /Page /Parent 18 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 1 0 R >> >> /Contents 16 0 R >>
+endobj
+18 0 obj
+<< /Length 1842 >>
+stream
+BT
+/F1 11 Tf
+50 790 Td
+15 TL
+() Tj
+T*
+(- Admin: CRUD, roles y gestion de datos.) Tj
+T*
+() Tj
+T*
+(- Inventario: trazabilidad, filtros, reportes y reglas de negocio.) Tj
+T*
+() Tj
+T*
+(- Operativa: modelado de procesos empresariales y tablas relacionadas.) Tj
+T*
+() Tj
+T*
+(- Base de datos: llaves primarias, foraneas, indices y consistencia.) Tj
+T*
+() Tj
+T*
+(12. Glosario de terminos) Tj
+T*
+() Tj
+T*
+(- API: interfaz que permite que dos sistemas se comuniquen.) Tj
+T*
+() Tj
+T*
+(- Endpoint: URL especifica de la API.) Tj
+T*
+() Tj
+T*
+(- JWT: token usado para autenticar usuarios.) Tj
+T*
+() Tj
+T*
+(- CRUD: crear, leer, actualizar y eliminar datos.) Tj
+T*
+() Tj
+T*
+(- Hash: transformacion segura de una contrasena.) Tj
+T*
+() Tj
+T*
+(- Transaccion: conjunto de operaciones SQL que deben completarse juntas.) Tj
+T*
+() Tj
+T*
+(- Rollback: deshacer cambios de una transaccion cuando ocurre un error.) Tj
+T*
+() Tj
+T*
+(- Modelo relacional: organizacion de datos en tablas conectadas.) Tj
+T*
+() Tj
+T*
+(- Trazabilidad: capacidad de saber que cambio se hizo, cuando y por quien.) Tj
+T*
+() Tj
+T*
+(- Migracion: cambio estructural aplicado a la base de datos.) Tj
+T*
+() Tj
+T*
+(13. Preguntas de autoestudio) Tj
+T*
+() Tj
+T*
+(- Que diferencia existe entre una ruta, un controlador y un modelo.) Tj
+T*
+() Tj
+T*
+(- Por que es importante usar JWT en vez de confiar solo en la interfaz.) Tj
+T*
+() Tj
+T*
+(- Que problema evita una transaccion en el registro de ventas.) Tj
+T*
+() Tj
+T*
+(- Por que conviene guardar movimientos historicos de inventario.) Tj
+T*
+() Tj
+T*
+(- Que ventajas ofrece separar configuracion en config.py.) Tj
+T*
+() Tj
+T*
+(- Como se relacionan las tablas ventas y detalle_venta.) Tj
+T*
+() Tj
+T*
+(- Que diferencia hay entre stock actual, stock minimo y stock contado.) Tj
+T*
+() Tj
+T*
+(- Por que un usuario inactivo no deberia poder iniciar sesion.) Tj
+ET
+endstream
+endobj
+19 0 obj
+<< /Type /Page /Parent 20 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 1 0 R >> >> /Contents 18 0 R >>
+endobj
+20 0 obj
+<< /Length 1246 >>
+stream
+BT
+/F1 11 Tf
+50 790 Td
+15 TL
+() Tj
+T*
+(14. Ruta recomendada para estudiar este proyecto) Tj
+T*
+() Tj
+T*
+(- Empieza por backend/app.py para ubicar el punto de entrada.) Tj
+T*
+() Tj
+T*
+(- Estudia el login completo desde frontend hasta modelo.) Tj
+T*
+() Tj
+T*
+(- Analiza el flujo de venta desde pos.js hasta sale_model.py.) Tj
+T*
+() Tj
+T*
+(- Revisa el CRUD de productos y usuarios.) Tj
+T*
+() Tj
+T*
+(- Estudia el modulo de caja.) Tj
+T*
+() Tj
+T*
+(- Continua con inventario basico.) Tj
+T*
+() Tj
+T*
+(- Finaliza con el modulo avanzado de operativa.) Tj
+T*
+() Tj
+T*
+(15. Conclusion general) Tj
+T*
+() Tj
+T*
+(PuntoFacil POS es un excelente ejemplo de estudio porque refleja problemas reales del) Tj
+T*
+(desarrollo de software: autenticacion, control por roles, transacciones, persistencia,) Tj
+T*
+(mantenimiento, auditoria y crecimiento por modulos. Como estudiante de ADSI, revisar este) Tj
+T*
+(proyecto con cuidado te permite pasar de la teoria a una estructura real de aplicacion.) Tj
+T*
+() Tj
+T*
+(En otras palabras, este sistema te ayuda a responder preguntas fundamentales de) Tj
+T*
+(programacion de software: donde entra la informacion, donde se valida, donde se transforma,) Tj
+T*
+(donde se guarda y como se presenta al usuario final.) Tj
+T*
+() Tj
+ET
+endstream
+endobj
+21 0 obj
+<< /Type /Page /Parent 22 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 1 0 R >> >> /Contents 20 0 R >>
+endobj
+22 0 obj
+<< /Type /Pages /Kids [3 0 R 5 0 R 7 0 R 9 0 R 11 0 R 13 0 R 15 0 R 17 0 R 19 0 R 21 0 R] /Count 10 >>
+endobj
+23 0 obj
+<< /Type /Catalog /Pages 22 0 R >>
+endobj
+xref
+0 24
+0000000000 65535 f 
+0000000009 00000 n 
+0000000079 00000 n 
+0000002246 00000 n 
+0000002372 00000 n 
+0000004094 00000 n 
+0000004220 00000 n 
+0000005916 00000 n 
+0000006042 00000 n 
+0000007811 00000 n 
+0000007938 00000 n 
+0000010049 00000 n 
+0000010178 00000 n 
+0000012112 00000 n 
+0000012241 00000 n 
+0000013971 00000 n 
+0000014100 00000 n 
+0000015796 00000 n 
+0000015925 00000 n 
+0000017820 00000 n 
+0000017949 00000 n 
+0000019248 00000 n 
+0000019377 00000 n 
+0000019496 00000 n 
+trailer
+<< /Size 24 /Root 23 0 R >>
+startxref
+19547
+%%EOF

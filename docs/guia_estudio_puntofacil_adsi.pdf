@@ -1,0 +1,393 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+2 0 obj
+<< /Length 2506 >>
+stream
+BT
+/F1 11 Tf
+50 790 Td
+15 TL
+(GUIA DE ESTUDIO DE LA APLICACION PUNTOFACIL POS) Tj
+T*
+() Tj
+T*
+(Material de apoyo academico para ADSI - SENA Colombia) Tj
+T*
+() Tj
+T*
+(1. PROPOSITO DEL DOCUMENTO) Tj
+T*
+(Este documento explica de forma clara el funcionamiento de la aplicacion PuntoFacil POS.) Tj
+T*
+(Fue pensado como una guia de estudio para ayudarte a comprender como se construye un) Tj
+T*
+(sistema web real, como se organizan sus carpetas, que hace cada archivo importante y) Tj
+T*
+(que conceptos de programacion de software puedes aprender con este proyecto.) Tj
+T*
+() Tj
+T*
+(2. QUE HACE LA APLICACION) Tj
+T*
+(PuntoFacil POS es un sistema web de punto de venta. Permite iniciar sesion, vender) Tj
+T*
+(productos, abrir y cerrar caja, administrar productos y usuarios, controlar inventario,) Tj
+T*
+(registrar movimientos de stock y manejar procesos avanzados como ordenes de compra,) Tj
+T*
+(recepcion de mercancia, conteos fisicos, transferencias y auditoria.) Tj
+T*
+() Tj
+T*
+(3. ARQUITECTURA GENERAL) Tj
+T*
+(La aplicacion esta organizada en capas: Frontend, Routes, Controllers, Models y Base) Tj
+T*
+(de datos. Flujo basico: Usuario -> Pantalla -> API Flask -> Route -> Controller ->) Tj
+T*
+(Model -> MySQL.) Tj
+T*
+() Tj
+T*
+(4. TECNOLOGIAS Y PROGRAMAS UTILIZADOS) Tj
+T*
+(- Python: backend.) Tj
+T*
+(- JavaScript: frontend.) Tj
+T*
+(- HTML y CSS: estructura y estilos.) Tj
+T*
+(- SQL / MySQL: persistencia de datos.) Tj
+T*
+(- Flask: framework del backend.) Tj
+T*
+(- flask-cors: comunicacion entre frontend y backend.) Tj
+T*
+(- flask-mysqldb: conexion a MySQL.) Tj
+T*
+(- flask-bcrypt: cifrado de contrasenas.) Tj
+T*
+(- flask-jwt-extended: autenticacion con JWT.) Tj
+T*
+(- Bootstrap 5, Bootstrap Icons y SweetAlert2 para la interfaz.) Tj
+T*
+(- Render y Netlify para despliegue.) Tj
+T*
+() Tj
+T*
+(5. ESTRUCTURA DE CARPETAS) Tj
+T*
+(- backend/: servidor Flask, rutas, controladores y modelos.) Tj
+T*
+(- frontend/: plantillas HTML, CSS y JavaScript.) Tj
+T*
+(- database/: scripts SQL y migraciones.) Tj
+T*
+(- docs/: documentacion del proyecto.) Tj
+T*
+(- .vscode/: configuracion del editor.) Tj
+T*
+(- venv/: entorno virtual de Python.) Tj
+T*
+() Tj
+T*
+(6. EXPLICACION DE CARPETAS Y ARCHIVOS) Tj
+T*
+(backend/) Tj
+T*
+(- app.py: punto de entrada del backend. Crea Flask, carga configuracion, habilita CORS,) Tj
+T*
+(  inicia JWT, conecta MySQL, registra rutas y sirve las paginas HTML.) Tj
+T*
+(- config.py: guarda variables de entorno y configuracion de MySQL/JWT.) Tj
+T*
+(- requirements.txt: dependencias de Python.) Tj
+ET
+endstream
+endobj
+3 0 obj
+<< /Type /Page /Parent 4 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 1 0 R >> >> /Contents 2 0 R >>
+endobj
+4 0 obj
+<< /Length 2727 >>
+stream
+BT
+/F1 11 Tf
+50 790 Td
+15 TL
+(- generate_password.py: genera hashes bcrypt.) Tj
+T*
+(- fix_admin_hash.py: actualiza el hash del administrador en MySQL.) Tj
+T*
+(- .python-version: archivo auxiliar de version.) Tj
+T*
+(- api_stdout.log / api_stderr.log: archivos de depuracion.) Tj
+T*
+() Tj
+T*
+(backend/routes/) Tj
+T*
+(- auth_routes.py: POST /api/login.) Tj
+T*
+(- product_routes.py: productos, categorias, dashboard, inventario, compras, conteos,) Tj
+T*
+(  transferencias y auditoria.) Tj
+T*
+(- sale_routes.py: ventas.) Tj
+T*
+(- cash_register_routes.py: abrir, cerrar y consultar caja.) Tj
+T*
+(- user_routes.py: CRUD de usuarios.) Tj
+T*
+() Tj
+T*
+(backend/controllers/) Tj
+T*
+(- auth_controller.py: valida credenciales y genera el token.) Tj
+T*
+(- product_controller.py: CRUD de productos, categorias y dashboard.) Tj
+T*
+(- sale_controller.py: valida y registra ventas.) Tj
+T*
+(- cash_register_controller.py: controla caja.) Tj
+T*
+(- inventory_controller.py: filtros, ajustes y movimientos.) Tj
+T*
+(- advanced_inventory_controller.py: compras, recepcion, conteos, transferencias,) Tj
+T*
+(  auditoria y dashboard financiero.) Tj
+T*
+(- user_controller.py: gestiona usuarios y roles.) Tj
+T*
+() Tj
+T*
+(backend/models/) Tj
+T*
+(- user_model.py: buscar, listar, crear, actualizar y eliminar usuarios.) Tj
+T*
+(- product_model.py: consultar categorias y productos; CRUD de productos.) Tj
+T*
+(- sale_model.py: transaccion de venta, detalle y descuento de stock.) Tj
+T*
+(- cash_register_model.py: apertura/cierre de caja y diferencia.) Tj
+T*
+(- inventory_model.py: resumenes, ajustes y trazabilidad en inventory_movements.) Tj
+T*
+(- advanced_inventory_model.py: compras, lotes, transferencias, conteos y auditoria.) Tj
+T*
+() Tj
+T*
+(frontend/) Tj
+T*
+(- index.html: redirige a /login.) Tj
+T*
+(- templates/login.html: pantalla de inicio de sesion.) Tj
+T*
+(- templates/pos.html: pantalla de punto de venta.) Tj
+T*
+(- templates/admin.html: pantalla administrativa.) Tj
+T*
+(- templates/inventory.html: pantalla de control de inventario.) Tj
+T*
+(- templates/operativa.html: pantalla de procesos avanzados.) Tj
+T*
+() Tj
+T*
+(frontend/static/js/) Tj
+T*
+(- config.js: calcula la URL base de la API para local o produccion.) Tj
+T*
+(- auth.js: guarda token y usuario en localStorage y adjunta Authorization.) Tj
+T*
+(- login.js: controla el formulario de login y la redireccion segun rol.) Tj
+T*
+(- pos.js: productos, carrito, caja, pagos y checkout.) Tj
+T*
+(- admin.js: dashboard y CRUD de productos y usuarios.) Tj
+T*
+(- inventory.js: filtros, KPIs, movimientos, ajuste de stock y exportacion CSV.) Tj
+T*
+(- operativa.js: compras, recepcion, conteos, transferencias y auditoria.) Tj
+T*
+(- ui.js: toasts, alertas, confirmaciones, tema y modo visual.) Tj
+ET
+endstream
+endobj
+5 0 obj
+<< /Type /Page /Parent 6 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 1 0 R >> >> /Contents 4 0 R >>
+endobj
+6 0 obj
+<< /Length 2191 >>
+stream
+BT
+/F1 11 Tf
+50 790 Td
+15 TL
+() Tj
+T*
+(frontend/static/css/) Tj
+T*
+(- app-shell.css: estilos globales compartidos.) Tj
+T*
+() Tj
+T*
+(database/) Tj
+T*
+(- schema.sql: cajas, ventas, detalle de venta y movimientos de inventario.) Tj
+T*
+(- migration_users.sql: crea usuarios y admin inicial.) Tj
+T*
+(- migration_user_status.sql: agrega estado en usuarios.) Tj
+T*
+(- migration_add_cash_register.sql: incorpora la tabla cajas.) Tj
+T*
+(- migration_inventory_control.sql: agrega stock minimo y movimientos.) Tj
+T*
+(- migration_high_impact.sql: proveedores, ordenes de compra, lotes, ubicaciones,) Tj
+T*
+(  transferencias, conteos y auditoria.) Tj
+T*
+() Tj
+T*
+(Otros archivos de la raiz) Tj
+T*
+(- render.yaml: despliegue del backend en Render.) Tj
+T*
+(- netlify.toml: publicacion del frontend en Netlify.) Tj
+T*
+(- .vscode/settings.json: puerto 5503 para Live Server.) Tj
+T*
+(- venv/: entorno virtual, no contiene logica del negocio.) Tj
+T*
+() Tj
+T*
+(7. FUNCIONAMIENTO PASO A PASO) Tj
+T*
+(Inicio de sesion:) Tj
+T*
+(1. login.html muestra el formulario.) Tj
+T*
+(2. login.js captura correo y contrasena.) Tj
+T*
+(3. Se envia POST /api/login.) Tj
+T*
+(4. auth_controller.py valida y genera JWT.) Tj
+T*
+(5. auth.js guarda la sesion y redirige segun rol.) Tj
+T*
+() Tj
+T*
+(Venta:) Tj
+T*
+(1. El cajero agrega productos al carrito en pos.html.) Tj
+T*
+(2. pos.js arma el payload.) Tj
+T*
+(3. sale_controller.py valida datos.) Tj
+T*
+(4. sale_model.py verifica caja abierta y stock.) Tj
+T*
+(5. Se guardan ventas y detalle_venta, y se descuenta inventario.) Tj
+T*
+() Tj
+T*
+(Inventario:) Tj
+T*
+(1. inventory.js consulta KPIs, productos y movimientos.) Tj
+T*
+(2. inventory_controller.py valida filtros.) Tj
+T*
+(3. inventory_model.py resume datos y registra trazabilidad.) Tj
+T*
+() Tj
+T*
+(Operaciones avanzadas:) Tj
+T*
+(1. operativa.js administra ordenes de compra, recepcion, conteos y transferencias.) Tj
+T*
+(2. advanced_inventory_controller.py aplica reglas de negocio.) Tj
+T*
+(3. advanced_inventory_model.py ejecuta transacciones SQL complejas.) Tj
+T*
+() Tj
+T*
+(8. CONCEPTOS DE ADSI PARA ESTUDIAR) Tj
+T*
+(- Arquitectura cliente servidor.) Tj
+T*
+(- Separacion por capas.) Tj
+T*
+(- Autenticacion y autorizacion.) Tj
+ET
+endstream
+endobj
+7 0 obj
+<< /Type /Page /Parent 8 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 1 0 R >> >> /Contents 6 0 R >>
+endobj
+8 0 obj
+<< /Length 713 >>
+stream
+BT
+/F1 11 Tf
+50 790 Td
+15 TL
+(- CRUD y validaciones.) Tj
+T*
+(- API REST y JSON.) Tj
+T*
+(- Transacciones y relaciones en MySQL.) Tj
+T*
+(- Control de inventario y trazabilidad.) Tj
+T*
+(- Configuracion por ambientes y despliegue.) Tj
+T*
+() Tj
+T*
+(9. RUTA RECOMENDADA DE ESTUDIO) Tj
+T*
+(Empieza por backend/app.py, luego login completo, despues el flujo de ventas,) Tj
+T*
+(luego el CRUD de productos, inventario y finalmente advanced_inventory_model.py.) Tj
+T*
+() Tj
+T*
+(10. CONCLUSION) Tj
+T*
+(PuntoFacil POS es un ejemplo real de sistema web empresarial. Te ayuda a entender) Tj
+T*
+(donde entra una solicitud, donde se valida, donde se procesa, donde se guarda y) Tj
+T*
+(como vuelve al usuario como respuesta.) Tj
+ET
+endstream
+endobj
+9 0 obj
+<< /Type /Page /Parent 10 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 1 0 R >> >> /Contents 8 0 R >>
+endobj
+10 0 obj
+<< /Type /Pages /Kids [3 0 R 5 0 R 7 0 R 9 0 R] /Count 4 >>
+endobj
+11 0 obj
+<< /Type /Catalog /Pages 10 0 R >>
+endobj
+xref
+0 12
+0000000000 65535 f 
+0000000009 00000 n 
+0000000079 00000 n 
+0000002637 00000 n 
+0000002763 00000 n 
+0000005542 00000 n 
+0000005668 00000 n 
+0000007911 00000 n 
+0000008037 00000 n 
+0000008801 00000 n 
+0000008928 00000 n 
+0000009004 00000 n 
+trailer
+<< /Size 12 /Root 11 0 R >>
+startxref
+9055
+%%EOF

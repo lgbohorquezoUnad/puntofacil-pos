@@ -12,6 +12,46 @@
 html,
 body {
   font-family: var(--app-font);
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+img,
+svg,
+canvas,
+video,
+iframe {
+  max-width: 100%;
+}
+
+.shell > *,
+.grid > *,
+.app-row > *,
+.left-stack > *,
+.center-stack > *,
+.right-rail > *,
+.panel-right > *,
+.stack > * {
+  min-width: 0;
+}
+
+.table-wrap,
+.movements-wrap,
+.table-responsive {
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.table-wrap .table,
+.movements-wrap .table,
+.table-responsive .table {
+  margin-bottom: 0;
 }
 
 button,
@@ -63,4 +103,12 @@ a:focus {
 .payment-tile:hover,
 .action-btn:hover {
   transform: translateY(-1px);
+}
+
+@media (max-width: 768px) {
+  .table-wrap .table,
+  .movements-wrap .table,
+  .table-responsive .table {
+    min-width: 680px;
+  }
 }

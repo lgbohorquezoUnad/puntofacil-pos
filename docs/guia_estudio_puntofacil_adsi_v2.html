@@ -1,0 +1,312 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Guia de estudio PuntoFacil POS - Version 2</title>
+  <style>
+    body { font-family: Arial, sans-serif; color: #1f2937; margin: 34px; line-height: 1.55; }
+    h1, h2, h3 { color: #0f4c81; }
+    h1 { font-size: 28px; margin-bottom: 4px; }
+    h2 { font-size: 20px; margin-top: 28px; border-bottom: 1px solid #dbe4ee; padding-bottom: 4px; }
+    h3 { font-size: 16px; margin-top: 18px; }
+    p, li { font-size: 12px; }
+    code { background: #eef2f7; padding: 2px 4px; border-radius: 4px; }
+    .muted { color: #64748b; }
+    .box { background: #f8fbff; border: 1px solid #d6e2ef; padding: 10px 12px; border-radius: 8px; }
+  </style>
+</head>
+<body>
+  <h1>Guia de estudio de la aplicacion PuntoFacil POS</h1>
+  <p class="muted">Version 2 - material de apoyo para ADSI del SENA</p>
+
+  <h2>1. Presentacion</h2>
+  <p>Esta version 2 fue escrita con un enfoque mas academico y explicativo. Su finalidad es ayudarte a estudiar programacion de software a partir de un proyecto real. En lugar de limitarse a nombrar archivos, esta guia explica la razon de ser de cada modulo, la relacion entre las capas del sistema y los conceptos tecnicos que puedes fortalecer como estudiante de ADSI.</p>
+  <p>La aplicacion analizada es <b>PuntoFacil POS</b>, un sistema web orientado a punto de venta, administracion, caja e inventario. Al estudiar este proyecto puedes ver claramente como se construye una solucion empresarial completa, desde la interfaz del usuario hasta la persistencia en base de datos.</p>
+
+  <h2>2. Objetivo academico de la guia</h2>
+  <ul>
+    <li>Explicar como funciona la aplicacion de forma clara y precisa.</li>
+    <li>Describir los programas, lenguajes y librerias utilizados.</li>
+    <li>Identificar el contenido de cada carpeta y el proposito de sus archivos.</li>
+    <li>Relacionar el proyecto con conceptos clave de ADSI.</li>
+    <li>Servir como ejemplo de estudio para complementar tus clases y practicas.</li>
+  </ul>
+
+  <h2>3. Descripcion general del sistema</h2>
+  <p>PuntoFacil POS es un sistema web que permite manejar procesos operativos y administrativos de un negocio. No se trata solamente de vender productos; tambien incorpora seguridad, control de inventario, trazabilidad y apoyo a decisiones operativas.</p>
+  <p>Entre las funciones principales del sistema se encuentran:</p>
+  <ul>
+    <li>Inicio de sesion con usuarios del sistema.</li>
+    <li>Control por roles: administrador y cajero.</li>
+    <li>Registro de ventas desde una interfaz POS.</li>
+    <li>Apertura y cierre de caja.</li>
+    <li>Administracion de productos.</li>
+    <li>Administracion de usuarios.</li>
+    <li>Control de inventario con movimientos historicos.</li>
+    <li>Sugerencias de reposicion de stock.</li>
+    <li>Control de lotes proximos a vencer.</li>
+    <li>Ordenes de compra y recepcion de mercancia.</li>
+    <li>Conteos fisicos y conciliacion de inventario.</li>
+    <li>Transferencias entre ubicaciones.</li>
+    <li>Registros de auditoria.</li>
+  </ul>
+
+  <h2>4. Arquitectura del proyecto</h2>
+  <p>La aplicacion sigue una arquitectura por capas. Esto es muy importante en ADSI porque enseña a separar responsabilidades. Cada capa cumple una tarea concreta y evita mezclar toda la logica en un solo archivo.</p>
+  <div class="box">
+    <p><b>Flujo general:</b> Usuario -&gt; Interfaz web -&gt; API Flask -&gt; Routes -&gt; Controllers -&gt; Models -&gt; MySQL</p>
+  </div>
+  <ul>
+    <li><b>Frontend</b>: es la parte visual que usa el usuario.</li>
+    <li><b>Routes</b>: mapean URL a funciones.</li>
+    <li><b>Controllers</b>: validan datos, revisan permisos y coordinan la logica.</li>
+    <li><b>Models</b>: ejecutan sentencias SQL y manipulan datos.</li>
+    <li><b>Base de datos</b>: almacena de forma persistente la informacion.</li>
+  </ul>
+  <p>En terminos de analisis y diseño, esta organizacion mejora el mantenimiento, la escalabilidad y la claridad del codigo.</p>
+
+  <h2>5. Programas, lenguajes y librerias utilizadas</h2>
+  <h3>5.1 Lenguajes</h3>
+  <ul>
+    <li><b>Python</b>: lenguaje principal del backend.</li>
+    <li><b>JavaScript</b>: controla la logica del frontend en el navegador.</li>
+    <li><b>HTML</b>: define la estructura de las interfaces.</li>
+    <li><b>CSS</b>: da estilo visual a la aplicacion.</li>
+    <li><b>SQL</b>: se usa para crear tablas, relaciones y consultas de MySQL.</li>
+  </ul>
+  <h3>5.2 Librerias del backend</h3>
+  <ul>
+    <li><b>Flask</b>: framework web ligero que permite crear endpoints y servir archivos.</li>
+    <li><b>flask-cors</b>: autoriza la comunicacion entre frontend y backend cuando estan en dominios diferentes.</li>
+    <li><b>flask-mysqldb</b>: conecta la aplicacion con MySQL.</li>
+    <li><b>flask-bcrypt</b>: protege contrasenas usando hash.</li>
+    <li><b>flask-jwt-extended</b>: implementa autenticacion basada en tokens JWT.</li>
+    <li><b>gunicorn</b>: servidor WSGI usado para despliegue en produccion.</li>
+  </ul>
+  <h3>5.3 Librerias del frontend</h3>
+  <ul>
+    <li><b>Bootstrap 5</b>: acelera la construccion de pantallas adaptables.</li>
+    <li><b>Bootstrap Icons</b>: provee iconos.</li>
+    <li><b>SweetAlert2</b>: mejora la presentacion de mensajes y confirmaciones.</li>
+  </ul>
+  <h3>5.4 Herramientas y entorno</h3>
+  <ul>
+    <li><b>MySQL</b>: gestor de base de datos relacional.</li>
+    <li><b>VS Code</b>: editor sugerido por la configuracion local del proyecto.</li>
+    <li><b>venv</b>: entorno virtual para aislar dependencias Python.</li>
+    <li><b>Render</b>: plataforma usada para desplegar la API.</li>
+    <li><b>Netlify</b>: plataforma usada para desplegar el frontend.</li>
+  </ul>
+
+  <h2>6. Estructura general de carpetas</h2>
+  <ul>
+    <li><b>backend/</b>: logica del servidor.</li>
+    <li><b>frontend/</b>: vistas, scripts y estilos de la interfaz.</li>
+    <li><b>database/</b>: scripts SQL y migraciones.</li>
+    <li><b>docs/</b>: documentacion y material de estudio.</li>
+    <li><b>.vscode/</b>: configuracion del editor.</li>
+    <li><b>venv/</b>: entorno virtual.</li>
+    <li><b>.git/</b>: repositorio de control de versiones.</li>
+  </ul>
+
+  <h2>7. Analisis de la carpeta backend</h2>
+  <h3>7.1 Archivo principal</h3>
+  <p><b>app.py</b> es el corazon del backend. En este archivo se crea la aplicacion Flask, se cargan los parametros de configuracion y se registran los modulos de rutas.</p>
+  <p>Funciones academicamente importantes que se observan aqui:</p>
+  <ul>
+    <li>Inicializacion de un framework web.</li>
+    <li>Carga de configuracion por variables de entorno.</li>
+    <li>Integracion con JWT y MySQL.</li>
+    <li>Definicion de rutas visuales como <code>/login</code>, <code>/pos</code> y <code>/admin</code>.</li>
+    <li>Habilitacion de CORS para soportar frontend y backend separados.</li>
+  </ul>
+
+  <h3>7.2 Configuracion</h3>
+  <p><b>config.py</b> concentra parametros sensibles como claves secretas y datos de MySQL. Esto enseña una buena practica: separar configuracion del codigo fuente.</p>
+
+  <h3>7.3 Utilidades del backend</h3>
+  <ul>
+    <li><b>requirements.txt</b>: muestra las dependencias de Python.</li>
+    <li><b>generate_password.py</b>: genera hashes para contrasenas.</li>
+    <li><b>fix_admin_hash.py</b>: permite actualizar el hash del administrador.</li>
+    <li><b>api_stdout.log</b> y <b>api_stderr.log</b>: sirven para depuracion.</li>
+  </ul>
+
+  <h3>7.4 Carpeta backend/routes</h3>
+  <p>Las rutas no contienen toda la logica; su funcion es enrutar la solicitud hacia el controlador correcto.</p>
+  <ul>
+    <li><b>auth_routes.py</b>: endpoint de login.</li>
+    <li><b>product_routes.py</b>: endpoints de productos, categorias, inventario y operaciones avanzadas.</li>
+    <li><b>sale_routes.py</b>: endpoint para registrar ventas.</li>
+    <li><b>cash_register_routes.py</b>: endpoints de caja.</li>
+    <li><b>user_routes.py</b>: endpoints CRUD de usuarios.</li>
+  </ul>
+
+  <h3>7.5 Carpeta backend/controllers</h3>
+  <p>Esta capa es ideal para estudiar validacion, reglas de acceso y coordinacion del negocio.</p>
+  <ul>
+    <li><b>auth_controller.py</b>: verifica usuario, estado y contrasena; genera JWT.</li>
+    <li><b>product_controller.py</b>: entrega productos y categorias, y permite crear, actualizar o eliminar productos.</li>
+    <li><b>sale_controller.py</b>: valida el carrito y el metodo de pago antes de enviar la venta al modelo.</li>
+    <li><b>cash_register_controller.py</b>: controla apertura y cierre de caja.</li>
+    <li><b>inventory_controller.py</b>: administra filtros, resumenes y ajustes de inventario.</li>
+    <li><b>advanced_inventory_controller.py</b>: maneja procesos mas completos como compras, conteos, auditoria y transferencias.</li>
+    <li><b>user_controller.py</b>: administra usuarios y valida que el actor sea administrador.</li>
+  </ul>
+
+  <h3>7.6 Carpeta backend/models</h3>
+  <p>Los modelos representan la capa de acceso a datos. Aqui es donde se entiende mejor como una aplicacion conversa con MySQL.</p>
+  <ul>
+    <li><b>user_model.py</b>: consultas sobre usuarios.</li>
+    <li><b>product_model.py</b>: consultas y operaciones sobre productos y categorias.</li>
+    <li><b>sale_model.py</b>: registra ventas usando transacciones; valida caja abierta y stock.</li>
+    <li><b>cash_register_model.py</b>: maneja la tabla de cajas y calcula diferencias de cierre.</li>
+    <li><b>inventory_model.py</b>: resume el inventario, aplica ajustes y registra movimientos.</li>
+    <li><b>advanced_inventory_model.py</b>: contiene procesos empresariales avanzados con multiples tablas relacionadas.</li>
+  </ul>
+
+  <h2>8. Analisis de la carpeta frontend</h2>
+  <p>El frontend es la parte que interactua directamente con el usuario. Aunque no usa frameworks modernos como React o Vue, resulta muy valioso para estudiar JavaScript puro, manipulación del DOM y consumo de APIs con <code>fetch</code>.</p>
+
+  <h3>8.1 Archivos HTML</h3>
+  <ul>
+    <li><b>index.html</b>: redirige a login.</li>
+    <li><b>login.html</b>: formulario de autenticacion.</li>
+    <li><b>pos.html</b>: interfaz de caja y ventas.</li>
+    <li><b>admin.html</b>: panel administrativo.</li>
+    <li><b>inventory.html</b>: panel de control de inventario.</li>
+    <li><b>operativa.html</b>: panel de operaciones avanzadas.</li>
+  </ul>
+
+  <h3>8.2 Scripts JavaScript</h3>
+  <ul>
+    <li><b>config.js</b>: resuelve la URL de la API segun el entorno.</li>
+    <li><b>auth.js</b>: guarda el token, recupera la sesion, valida roles y protege rutas del frontend.</li>
+    <li><b>login.js</b>: controla el envio del formulario de autenticacion.</li>
+    <li><b>pos.js</b>: administra productos, carrito, metodos de pago, caja y checkout.</li>
+    <li><b>admin.js</b>: administra dashboard, productos y usuarios.</li>
+    <li><b>inventory.js</b>: consulta KPIs, movimientos y widgets de alto impacto.</li>
+    <li><b>operativa.js</b>: gestiona compras, recepcion, conteos, transferencias y auditoria.</li>
+    <li><b>ui.js</b>: encapsula toasts, alertas, tema visual y modo simple o avanzado.</li>
+  </ul>
+
+  <h3>8.3 CSS compartido</h3>
+  <p><b>app-shell.css</b> contiene estilos base comunes. Desde el punto de vista del diseño de software, esto evita repetir reglas visuales y ayuda a mantener coherencia entre pantallas.</p>
+
+  <h2>9. Analisis de la carpeta database</h2>
+  <p>La carpeta <code>database</code> muestra como evoluciona un sistema de informacion a traves de migraciones. Esto es importante porque en la vida real una base de datos no se queda estatica: crece con las necesidades del negocio.</p>
+  <ul>
+    <li><b>schema.sql</b>: base de ventas, detalle, caja y movimientos de inventario.</li>
+    <li><b>migration_users.sql</b>: usuarios y administrador inicial.</li>
+    <li><b>migration_user_status.sql</b>: agrega estado activo/inactivo.</li>
+    <li><b>migration_add_cash_register.sql</b>: integra caja con ventas.</li>
+    <li><b>migration_inventory_control.sql</b>: agrega stock minimo y trazabilidad.</li>
+    <li><b>migration_high_impact.sql</b>: agrega modulo avanzado de inventario.</li>
+  </ul>
+
+  <h2>10. Funcionamiento detallado del sistema</h2>
+  <h3>10.1 Autenticacion</h3>
+  <ol>
+    <li>El usuario digita correo y contrasena en <code>login.html</code>.</li>
+    <li><code>login.js</code> envia la solicitud <code>POST /api/login</code>.</li>
+    <li><code>auth_controller.py</code> recibe los datos y consulta el usuario.</li>
+    <li>La contrasena se compara con bcrypt.</li>
+    <li>Si es correcta, se crea un token JWT.</li>
+    <li>El frontend guarda la sesion en <code>localStorage</code>.</li>
+  </ol>
+
+  <h3>10.2 Consulta y filtrado de productos</h3>
+  <ol>
+    <li>La interfaz llama a <code>/api/products</code> y <code>/api/categories</code>.</li>
+    <li>El controlador verifica autenticacion.</li>
+    <li>El modelo consulta MySQL y devuelve datos serializados.</li>
+    <li>El frontend construye tarjetas, tablas y filtros.</li>
+  </ol>
+
+  <h3>10.3 Registro de ventas</h3>
+  <ol>
+    <li>El usuario arma un carrito en <code>pos.js</code>.</li>
+    <li>Selecciona metodo de pago.</li>
+    <li>El sistema exige caja abierta.</li>
+    <li>La API valida los datos.</li>
+    <li>El modelo realiza una transaccion SQL.</li>
+    <li>Se insertan encabezado y detalle de la venta.</li>
+    <li>Se descuenta stock de cada producto.</li>
+  </ol>
+  <p>Este flujo es excelente para estudiar integridad transaccional.</p>
+
+  <h3>10.4 Apertura y cierre de caja</h3>
+  <ol>
+    <li>El usuario define un monto inicial.</li>
+    <li>La API crea un registro en la tabla <code>cajas</code>.</li>
+    <li>Al cerrar, el sistema suma las ventas asociadas.</li>
+    <li>Calcula monto esperado, monto contado y diferencia.</li>
+  </ol>
+
+  <h3>10.5 Inventario</h3>
+  <p>El inventario no solo muestra stock. Tambien calcula resumenes, detecta agotados, productos bajos y valor monetario del inventario. Ademas, registra cada ajuste en una tabla historica, lo cual aporta trazabilidad.</p>
+
+  <h3>10.6 Operaciones avanzadas</h3>
+  <p>La pantalla operativa concentra procesos mas cercanos a un ERP o sistema empresarial:</p>
+  <ul>
+    <li>Generacion de ordenes de compra.</li>
+    <li>Recepcion parcial o total de mercancia.</li>
+    <li>Registro de fechas de vencimiento por lote.</li>
+    <li>Conteos fisicos y conciliacion.</li>
+    <li>Transferencias entre sucursales o bodegas.</li>
+    <li>Auditoria de acciones realizadas.</li>
+  </ul>
+
+  <h2>11. Que aprende un estudiante de ADSI con cada modulo</h2>
+  <ul>
+    <li><b>Login</b>: autenticacion, hash de contrasenas, sesiones y seguridad.</li>
+    <li><b>POS</b>: carrito, formularios, eventos y operaciones transaccionales.</li>
+    <li><b>Admin</b>: CRUD, roles y gestion de datos.</li>
+    <li><b>Inventario</b>: trazabilidad, filtros, reportes y reglas de negocio.</li>
+    <li><b>Operativa</b>: modelado de procesos empresariales y tablas relacionadas.</li>
+    <li><b>Base de datos</b>: llaves primarias, foraneas, indices y consistencia.</li>
+  </ul>
+
+  <h2>12. Glosario de terminos</h2>
+  <ul>
+    <li><b>API</b>: interfaz que permite que dos sistemas se comuniquen.</li>
+    <li><b>Endpoint</b>: URL especifica de la API.</li>
+    <li><b>JWT</b>: token usado para autenticar usuarios.</li>
+    <li><b>CRUD</b>: crear, leer, actualizar y eliminar datos.</li>
+    <li><b>Hash</b>: transformacion segura de una contrasena.</li>
+    <li><b>Transaccion</b>: conjunto de operaciones SQL que deben completarse juntas.</li>
+    <li><b>Rollback</b>: deshacer cambios de una transaccion cuando ocurre un error.</li>
+    <li><b>Modelo relacional</b>: organizacion de datos en tablas conectadas.</li>
+    <li><b>Trazabilidad</b>: capacidad de saber que cambio se hizo, cuando y por quien.</li>
+    <li><b>Migracion</b>: cambio estructural aplicado a la base de datos.</li>
+  </ul>
+
+  <h2>13. Preguntas de autoestudio</h2>
+  <ol>
+    <li>Que diferencia existe entre una ruta, un controlador y un modelo.</li>
+    <li>Por que es importante usar JWT en vez de confiar solo en la interfaz.</li>
+    <li>Que problema evita una transaccion en el registro de ventas.</li>
+    <li>Por que conviene guardar movimientos historicos de inventario.</li>
+    <li>Que ventajas ofrece separar configuracion en <code>config.py</code>.</li>
+    <li>Como se relacionan las tablas <code>ventas</code> y <code>detalle_venta</code>.</li>
+    <li>Que diferencia hay entre stock actual, stock minimo y stock contado.</li>
+    <li>Por que un usuario inactivo no deberia poder iniciar sesion.</li>
+  </ol>
+
+  <h2>14. Ruta recomendada para estudiar este proyecto</h2>
+  <ol>
+    <li>Empieza por <code>backend/app.py</code> para ubicar el punto de entrada.</li>
+    <li>Estudia el login completo desde frontend hasta modelo.</li>
+    <li>Analiza el flujo de venta desde <code>pos.js</code> hasta <code>sale_model.py</code>.</li>
+    <li>Revisa el CRUD de productos y usuarios.</li>
+    <li>Estudia el modulo de caja.</li>
+    <li>Continua con inventario basico.</li>
+    <li>Finaliza con el modulo avanzado de operativa.</li>
+  </ol>
+
+  <h2>15. Conclusion general</h2>
+  <p>PuntoFacil POS es un excelente ejemplo de estudio porque refleja problemas reales del desarrollo de software: autenticacion, control por roles, transacciones, persistencia, mantenimiento, auditoria y crecimiento por modulos. Como estudiante de ADSI, revisar este proyecto con cuidado te permite pasar de la teoria a una estructura real de aplicacion.</p>
+  <p>En otras palabras, este sistema te ayuda a responder preguntas fundamentales de programacion de software: donde entra la informacion, donde se valida, donde se transforma, donde se guarda y como se presenta al usuario final.</p>
+</body>
+</html>

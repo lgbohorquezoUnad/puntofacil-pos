@@ -1,4 +1,4 @@
-﻿from flask import request, jsonify
+from flask import request, jsonify
 from flask_bcrypt import Bcrypt
 from flask_jwt_extended import jwt_required, get_jwt_identity, get_jwt
 from models.user_model import get_all_users, create_user, update_user, delete_user
@@ -55,18 +55,25 @@ def add_user(mysql):
         return jsonify({"error": "No autorizado"}), 403
 
     data = request.json or {}
-    nombre = data.get("nombre")
-    email = data.get("email")
-    password = data.get("password")
+    nombre = (data.get("nombre") or "").strip()
+    email = (data.get("email") or "").strip().lower()
+    password = data.get("password") or ""
     rol = data.get("rol", "cajero")
+    estado = data.get("estado", "activo")
 
     if not nombre or not email or not password:
         return jsonify({"error": "Faltan datos obligatorios"}), 400
 
+    if rol not in {"admin", "cajero"}:
+        return jsonify({"error": "Rol invalido"}), 400
+
+    if estado not in {"activo", "inactivo"}:
+        return jsonify({"error": "Estado invalido"}), 400
+
     hashed_password = bcrypt.generate_password_hash(password).decode("utf-8")
 
     try:
-        user_id = create_user(mysql, nombre, email, hashed_password, rol)
+        user_id = create_user(mysql, nombre, email, hashed_password, rol, estado)
         return jsonify({"message": "Usuario creado correctamente", "id": user_id}), 201
     except Exception as e:
         return jsonify({"error": str(e)}), 500
@@ -78,12 +85,27 @@ def modify_user(mysql, user_id):
         return jsonify({"error": "No autorizado"}), 403
 
     data = request.json or {}
-    nombre = data.get("nombre")
-    email = data.get("email")
+    nombre = (data.get("nombre") or "").strip()
+    email = (data.get("email") or "").strip().lower()
     rol = data.get("rol")
+    estado = data.get("estado")
+    password = (data.get("password") or "").strip()
+
+    if not nombre or not email or not rol or not estado:
+        return jsonify({"error": "Faltan datos obligatorios"}), 400
+
+    if rol not in {"admin", "cajero"}:
+        return jsonify({"error": "Rol invalido"}), 400
+
+    if estado not in {"activo", "inactivo"}:
+        return jsonify({"error": "Estado invalido"}), 400
+
+    hashed_password = None
+    if password:
+        hashed_password = bcrypt.generate_password_hash(password).decode("utf-8")
 
     try:
-        update_user(mysql, user_id, nombre, email, rol)
+        update_user(mysql, user_id, nombre, email, rol, estado, hashed_password)
         return jsonify({"message": "Usuario actualizado correctamente"}), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500

@@ -5,6 +5,7 @@ Auth.requireAdmin();
 
 let adminProducts = [];
 let adminCategories = [];
+let adminUsers = [];
 
 function formatMoney(value) {
   return "$" + Number(value || 0).toLocaleString("es-CO", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
@@ -241,25 +242,38 @@ async function deleteProduct(productId) {
   }
 }
 
-async function loadUsers() {
-  const response = await Auth.fetchWithAuth(`${API_BASE_URL}/api/usuarios`);
-  if (!response.ok) {
-    showFeedback("No fue posible cargar los usuarios", "error");
-    return;
-  }
+function formatUserDate(value) {
+  if (!value) return "-";
+  const date = new Date(value);
+  return Number.isNaN(date.getTime()) ? String(value) : date.toLocaleDateString("es-CO");
+}
 
-  const users = await response.json();
+function renderUsers(users) {
   const tbody = document.getElementById("adminUsersTable");
   tbody.innerHTML = "";
 
+  if (!users.length) {
+    tbody.innerHTML = '<tr><td colspan="6" class="text-center text-muted py-4">No hay usuarios habilitados para este filtro</td></tr>';
+    return;
+  }
+
   users.forEach(user => {
+    const status = user.estado || "activo";
     tbody.innerHTML += `
       <tr>
-        <td>${user.nombre}</td>
+        <td>
+          <div class="user-name">${user.nombre}</div>
+          <div class="user-meta">ID #${user.id}</div>
+        </td>
         <td>${user.email}</td>
         <td><span class="badge ${user.rol === "admin" ? "bg-danger" : "bg-primary"}">${user.rol}</span></td>
+        <td><span class="badge ${status === "activo" ? "bg-success" : "bg-secondary"}">${status}</span></td>
+        <td>${formatUserDate(user.fecha_creacion)}</td>
         <td>
           <div class="product-actions">
+            <button type="button" class="mini-btn mini-edit" onclick="editUser(${user.id})">
+              <i class="bi bi-pencil"></i>
+            </button>
             <button type="button" class="mini-btn mini-delete" onclick="deleteUser(${user.id})">
               <i class="bi bi-trash"></i>
             </button>
@@ -270,23 +284,88 @@ async function loadUsers() {
   });
 }
 
+function updateUsersSummary(users) {
+  const admins = users.filter(user => user.rol === "admin").length;
+  const cashiers = users.filter(user => user.rol === "cajero").length;
+  document.getElementById("usersTotal").textContent = users.length;
+  document.getElementById("usersAdmins").textContent = admins;
+  document.getElementById("usersCashiers").textContent = cashiers;
+  document.getElementById("usersCountBadge").textContent = `${users.length} usuarios`;
+}
+
+function filterUsers() {
+  const term = (document.getElementById("adminUserSearch")?.value || "").trim().toLowerCase();
+  if (!term) {
+    renderUsers(adminUsers);
+    return;
+  }
+
+  const filtered = adminUsers.filter(user => {
+    const name = (user.nombre || "").toLowerCase();
+    const email = (user.email || "").toLowerCase();
+    const rol = (user.rol || "").toLowerCase();
+    const estado = (user.estado || "").toLowerCase();
+    return name.includes(term) || email.includes(term) || rol.includes(term) || estado.includes(term);
+  });
+
+  renderUsers(filtered);
+}
+
+async function loadUsers() {
+  const response = await Auth.fetchWithAuth(`${API_BASE_URL}/api/usuarios`);
+  if (!response.ok) {
+    showFeedback("No fue posible cargar los usuarios", "error");
+    return;
+  }
+
+  adminUsers = await response.json();
+  updateUsersSummary(adminUsers);
+  renderUsers(adminUsers);
+}
+
 function resetUserForm() {
   document.getElementById("userForm").reset();
+  document.getElementById("userId").value = "";
+  document.getElementById("userStatus").value = "activo";
+  document.getElementById("submitUserButton").textContent = "Crear usuario";
+  clearFeedback();
+}
+
+function editUser(id) {
+  const user = adminUsers.find(item => item.id === id);
+  if (!user) {
+    return;
+  }
+
+  document.getElementById("userId").value = user.id;
+  document.getElementById("userName").value = user.nombre || "";
+  document.getElementById("userEmail").value = user.email || "";
+  document.getElementById("userPassword").value = "";
+  document.getElementById("userRole").value = user.rol || "cajero";
+  document.getElementById("userStatus").value = user.estado || "activo";
+  document.getElementById("submitUserButton").textContent = "Actualizar usuario";
   clearFeedback();
 }
 
 async function submitUserForm(event) {
   event.preventDefault();
 
+  const userId = document.getElementById("userId").value;
   const payload = {
     nombre: document.getElementById("userName").value.trim(),
     email: document.getElementById("userEmail").value.trim(),
     password: document.getElementById("userPassword").value.trim(),
-    rol: document.getElementById("userRole").value
+    rol: document.getElementById("userRole").value,
+    estado: document.getElementById("userStatus").value
   };
 
-  if (!payload.nombre || !payload.email || !payload.password) {
+  if (!payload.nombre || !payload.email) {
     showFeedback("Completa los datos del usuario", "error");
+    return;
+  }
+
+  if (!userId && !payload.password) {
+    showFeedback("La contrasena es obligatoria para crear usuarios", "error");
     return;
   }
 
@@ -294,21 +373,21 @@ async function submitUserForm(event) {
   btn.disabled = true;
 
   try {
-    const response = await Auth.fetchWithAuth(`${API_BASE_URL}/api/usuarios`, {
-      method: "POST",
+    const response = await Auth.fetchWithAuth(userId ? `${API_BASE_URL}/api/usuarios/${userId}` : `${API_BASE_URL}/api/usuarios`, {
+      method: userId ? "PUT" : "POST",
       body: JSON.stringify(payload)
     });
 
     const data = await response.json().catch(() => ({}));
     if (!response.ok) {
-      throw new Error(data.error || "Error creando usuario");
+      throw new Error(data.error || "Error guardando usuario");
     }
 
-    UI.toast("Usuario creado exitosamente", "success");
+    UI.toast(userId ? "Usuario actualizado exitosamente" : "Usuario creado exitosamente", "success");
     resetUserForm();
     await loadUsers();
   } catch (err) {
-    showFeedback(err.message || "No se pudo crear el usuario", "error");
+    showFeedback(err.message || "No se pudo guardar el usuario", "error");
   } finally {
     btn.disabled = false;
   }
@@ -345,6 +424,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     userForm.addEventListener("submit", submitUserForm);
   }
 
+  resetUserForm();
+
   await Promise.all([
     loadDashboard(),
     loadCategories(),
@@ -359,7 +440,6 @@ window.resetProductForm = resetProductForm;
 window.editProduct = editProduct;
 window.deleteProduct = deleteProduct;
 window.deleteUser = deleteUser;
-
+window.editUser = editUser;
+window.filterUsers = filterUsers;
 window.resetUserForm = resetUserForm;
-
-

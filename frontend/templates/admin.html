@@ -65,6 +65,8 @@
     .header-links {
       display: flex;
       gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
     }
 
     .header-link {
@@ -75,6 +77,7 @@
       background: rgba(255, 255, 255, 0.12);
       font-size: 13px;
       font-weight: 700;
+      white-space: nowrap;
     }
 
     .shell {
@@ -209,6 +212,11 @@
       display: flex;
       gap: 10px;
       margin-top: 14px;
+      flex-wrap: wrap;
+    }
+
+    .form-actions .btn-strong {
+      flex: 1 1 220px;
     }
 
     .btn-strong {
@@ -256,6 +264,7 @@
     .product-actions {
       display: flex;
       gap: 8px;
+      flex-wrap: wrap;
     }
 
     .mini-btn {
@@ -301,10 +310,72 @@
       display: flex;
       gap: 10px;
       margin-bottom: 12px;
+      flex-wrap: wrap;
+      align-items: center;
     }
 
     .toolbar .form-control {
       max-width: 260px;
+      flex: 1 1 220px;
+    }
+    .section-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .header-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: var(--brand-soft);
+      color: var(--brand);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .users-summary {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .summary-pill {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: white;
+      padding: 10px 12px;
+    }
+
+    .summary-pill .label {
+      color: var(--muted);
+      font-size: 11px;
+      margin-bottom: 4px;
+    }
+
+    .summary-pill .value {
+      font-size: 20px;
+      font-weight: 800;
+    }
+
+    .user-name {
+      font-weight: 700;
+    }
+
+    .user-meta {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .top-item {
+      flex-wrap: wrap;
+      gap: 8px;
     }
 
     @media (max-width: 1100px) {
@@ -326,6 +397,10 @@
         grid-template-columns: 1fr;
       }
 
+      .users-summary {
+        grid-template-columns: 1fr;
+      }
+
       .form-grid {
         grid-template-columns: 1fr;
       }
@@ -333,6 +408,21 @@
       .header-bar {
         flex-direction: column;
         align-items: flex-start;
+      }
+
+      .header-links {
+        width: 100%;
+      }
+
+      .header-link,
+      .header .btn {
+        width: 100%;
+        justify-content: center;
+        text-align: center;
+      }
+
+      .toolbar .form-control {
+        max-width: none;
       }
     }
       [data-app-mode="simple"] [data-mode="advanced"] {
@@ -417,10 +507,31 @@
               </div>
             </div>
           </div>
-
-          <div class="card products-card mt-3" id="usersSection" data-mode="advanced">
-            <div class="card-header">Usuarios registrados</div>
+          <div class="card products-card mt-3" id="usersSection">
+            <div class="card-header">
+              <div class="section-head">
+                <span>Usuarios habilitados</span>
+                <span class="header-chip"><i class="bi bi-people-fill"></i><span id="usersCountBadge">0 usuarios</span></span>
+              </div>
+            </div>
             <div class="card-body">
+              <div class="users-summary">
+                <div class="summary-pill">
+                  <div class="label">Total</div>
+                  <div class="value" id="usersTotal">0</div>
+                </div>
+                <div class="summary-pill">
+                  <div class="label">Administradores</div>
+                  <div class="value" id="usersAdmins">0</div>
+                </div>
+                <div class="summary-pill">
+                  <div class="label">Cajeros</div>
+                  <div class="value" id="usersCashiers">0</div>
+                </div>
+              </div>
+              <div class="toolbar">
+                <input id="adminUserSearch" class="form-control" placeholder="Buscar usuario o correo..." onkeyup="filterUsers()">
+              </div>
               <div class="table-wrap">
                 <table class="table table-hover align-middle">
                   <thead>
@@ -428,6 +539,8 @@
                       <th>Nombre</th>
                       <th>Email</th>
                       <th>Rol</th>
+                      <th>Estado</th>
+                      <th>Alta</th>
                       <th>Acciones</th>
                     </tr>
                   </thead>
@@ -476,10 +589,12 @@
           </div>
         </div>
 
-        <div class="card form-card mt-3" data-mode="advanced">
+        <div class="card form-card mt-3">
           <div class="card-header">Gestion de usuario</div>
           <div class="card-body">
+            <div class="text-muted small mb-3">Crea usuarios habilitados para administrar o vender dentro del sistema.</div>
             <form id="userForm">
+              <input type="hidden" id="userId">
               <div class="form-grid">
                 <div class="form-group full">
                   <label class="form-label">Nombre</label>
@@ -491,7 +606,7 @@
                 </div>
                 <div class="form-group">
                   <label class="form-label">Contrasena</label>
-                  <input id="userPassword" type="password" class="form-control" required autocomplete="new-password">
+                  <input id="userPassword" type="password" class="form-control" autocomplete="new-password">
                 </div>
                 <div class="form-group">
                   <label class="form-label">Rol</label>
@@ -500,7 +615,15 @@
                     <option value="admin">Administrador</option>
                   </select>
                 </div>
+                <div class="form-group">
+                  <label class="form-label">Estado</label>
+                  <select id="userStatus" class="form-select" required>
+                    <option value="activo">Activo</option>
+                    <option value="inactivo">Inactivo</option>
+                  </select>
+                </div>
               </div>
+              <div class="text-muted small mt-2">Deja la contrasena vacia si solo quieres actualizar nombre, correo, rol o estado.</div>
               <div class="form-actions">
                 <button class="btn-strong btn-save" type="submit" id="submitUserButton">Crear usuario</button>
                 <button class="btn-strong btn-reset" type="button" onclick="resetUserForm()">Limpiar</button>
@@ -520,12 +643,4 @@
 </body>
 
 </html>
-
-
-
-
-
-
-
-
 

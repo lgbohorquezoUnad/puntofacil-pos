@@ -1,37 +1,37 @@
-﻿[build]
-  publish = "frontend"
+[build]
+publish = "frontend"
 
 [[redirects]]
-  from = "/"
-  to = "/templates/login.html"
-  status = 200
+from = "/"
+to = "/templates/login.html"
+status = 200
 
 [[redirects]]
-  from = "/login"
-  to = "/templates/login.html"
-  status = 200
+from = "/login"
+to = "/templates/login.html"
+status = 200
 
 [[redirects]]
-  from = "/pos"
-  to = "/templates/pos.html"
-  status = 200
+from = "/pos"
+to = "/templates/pos.html"
+status = 200
 
 [[redirects]]
-  from = "/admin"
-  to = "/templates/admin.html"
-  status = 200
+from = "/admin"
+to = "/templates/admin.html"
+status = 200
 
 [[redirects]]
-  from = "/inventory"
-  to = "/templates/inventory.html"
-  status = 200
+from = "/inventory"
+to = "/templates/inventory.html"
+status = 200
 
 [[redirects]]
-  from = "/operativa"
-  to = "/templates/operativa.html"
-  status = 200
+from = "/operativa"
+to = "/templates/operativa.html"
+status = 200
 
 [[redirects]]
-  from = "/frontend/*"
-  to = "/:splat"
-  status = 301
+from = "/frontend/*"
+to = "/:splat"
+status = 301

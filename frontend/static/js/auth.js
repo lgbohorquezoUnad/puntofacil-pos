@@ -48,17 +48,23 @@ const Auth = {
         }
     },
 
-    getAuthHeaders() {
-        return {
-            'Content-Type': 'application/json',
+    getAuthHeaders(includeJson = true) {
+        const headers = {
             'Authorization': `Bearer ${this.getToken()}`
         };
+
+        if (includeJson) {
+            headers['Content-Type'] = 'application/json';
+        }
+
+        return headers;
     },
 
     // A helper method wrapping fetch to automatically attach headers
     async fetchWithAuth(url, options = {}) {
+        const isFormData = typeof FormData !== 'undefined' && options.body instanceof FormData;
         const headers = {
-            ...this.getAuthHeaders(),
+            ...(isFormData ? this.getAuthHeaders(false) : this.getAuthHeaders()),
             ...options.headers
         };
 
@@ -81,3 +87,4 @@ const Auth = {
 };
 
 window.Auth = Auth;
+

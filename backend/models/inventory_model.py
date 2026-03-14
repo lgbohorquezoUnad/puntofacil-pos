@@ -1,4 +1,4 @@
-﻿from decimal import Decimal
+from decimal import Decimal
 
 
 def get_inventory_overview(
@@ -56,6 +56,8 @@ def get_inventory_overview(
                p.stock_minimo,
                p.precio_venta,
                c.nombre,
+               p.categoria_id,
+               p.imagen_url,
                COALESCE(SUM(CASE WHEN v.fecha >= DATE_SUB(NOW(), INTERVAL 30 DAY) THEN dv.cantidad ELSE 0 END), 0) AS units_sold_30d,
                MAX(v.fecha) AS last_sale_at,
                (p.stock * p.precio_venta) AS inventory_value
@@ -64,7 +66,7 @@ def get_inventory_overview(
         LEFT JOIN detalle_venta dv ON dv.producto_id = p.id
         LEFT JOIN ventas v ON v.id = dv.venta_id
         {where_sql}
-        GROUP BY p.id, p.nombre, p.codigo_barras, p.stock, p.stock_minimo, p.precio_venta, c.nombre
+        GROUP BY p.id, p.nombre, p.codigo_barras, p.stock, p.stock_minimo, p.precio_venta, c.nombre, p.categoria_id, p.imagen_url
         ORDER BY {order_column} {order_direction}, p.nombre ASC
         LIMIT %s
         """,
@@ -83,7 +85,7 @@ def get_inventory_overview(
         stock = int(row[3])
         stock_minimo = int(row[4])
         price = Decimal(str(row[5]))
-        inventory_value = Decimal(str(row[9] or 0))
+        inventory_value = Decimal(str(row[11] or 0))
 
         if stock == 0:
             status = "out"
@@ -106,8 +108,10 @@ def get_inventory_overview(
                 "stock_minimo": stock_minimo,
                 "precio": float(price),
                 "categoria": row[6],
-                "units_sold_30d": int(row[7] or 0),
-                "last_sale_at": row[8].strftime("%Y-%m-%d %H:%M:%S") if row[8] else None,
+                "categoria_id": row[7],
+                "imagen_url": row[8],
+                "units_sold_30d": int(row[9] or 0),
+                "last_sale_at": row[10].strftime("%Y-%m-%d %H:%M:%S") if row[10] else None,
                 "inventory_value": float(inventory_value),
                 "stock_status": status,
             }
@@ -122,6 +126,7 @@ def get_inventory_overview(
     }
 
     return {"summary": summary, "products": products}
+
 
 
 def adjust_inventory_stock(mysql, product_id, movement_type, quantity, reason, user_id=None):
@@ -211,6 +216,7 @@ def adjust_inventory_stock(mysql, product_id, movement_type, quantity, reason, u
         "quantity": signed_quantity,
         "reason": reason,
     }
+
 
 
 def list_inventory_movements(mysql, product_id=None, limit=100):

@@ -450,7 +450,6 @@
         <a class="header-link" href="/pos">Ir al POS</a>
         <a class="header-link" href="/inventory">Inventario</a>
         <a class="header-link" href="/operativa">Operativa</a>
-        <a class="header-link" href="#productsSection">Productos</a>
         <a class="header-link" href="#usersSection">Usuarios</a>
       </div>
     </div>
@@ -480,31 +479,6 @@
                 </div>
               </div>
               <div class="top-list" id="topProducts"></div>
-            </div>
-          </div>
-
-          <div class="card products-card" id="productsSection">
-            <div class="card-header">Productos registrados</div>
-            <div class="card-body">
-              <div class="toolbar">
-                <input id="adminProductSearch" class="form-control" placeholder="Buscar producto..."
-                  onkeyup="filterAdminProducts()">
-              </div>
-              <div class="table-wrap">
-                <table class="table table-hover align-middle">
-                  <thead>
-                    <tr>
-                      <th>Producto</th>
-                      <th>Categoria</th>
-                      <th>Precio</th>
-                      <th>Stock</th>
-                      <th>Codigo</th>
-                      <th>Acciones</th>
-                    </tr>
-                  </thead>
-                  <tbody id="adminProductsTable"></tbody>
-                </table>
-              </div>
             </div>
           </div>
           <div class="card products-card mt-3" id="usersSection">
@@ -555,6 +529,7 @@
           <div class="card form-card">
             <div class="card-header">Gestion de producto</div>
             <div class="card-body">
+              <div class="text-muted small mb-3">La visualizacion detallada de productos y sus imagenes se consulta desde Inventario.</div>
               <form id="productForm" onsubmit="submitProductForm(event)">
                 <input type="hidden" id="productId">
                 <div class="form-grid">
@@ -578,6 +553,18 @@
                     <label class="form-label">Stock</label>
                     <input id="productStock" type="number" min="0" class="form-control" required>
                   </div>
+                  <div class="form-group full">
+                    <label class="form-label">URL de imagen</label>
+                    <input id="productImageUrl" class="form-control" placeholder="https://servidor.com/imagen.jpg">
+                  </div>
+                  <div class="form-group full">
+                    <label class="form-label">Subir imagen</label>
+                    <input id="productImageFile" type="file" class="form-control" accept="image/*">
+                  </div>
+                  <div class="form-group full">
+                    <img id="productImagePreview" alt="Vista previa del producto" style="width:100%; max-height:220px; object-fit:contain; padding:8px; border-radius:14px; border:1px solid #d8e0e8; background:#ffffff; display:none;">
+                  </div>
+
                 </div>
                 <div class="form-actions">
                   <button class="btn-strong btn-save" type="submit" id="submitButton">Guardar producto</button>
@@ -643,4 +630,12 @@
 </body>
 
 </html>
+
+
+
+
+
+
+
+
 

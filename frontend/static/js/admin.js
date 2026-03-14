@@ -23,6 +23,37 @@ function clearFeedback() {
   feedback.textContent = "";
 }
 
+function renderProductImagePreview(src = "") {
+  const preview = document.getElementById("productImagePreview");
+  if (!preview) return;
+
+  if (!src) {
+    preview.style.display = "none";
+    preview.removeAttribute("src");
+    return;
+  }
+
+  preview.src = src;
+  preview.style.display = "block";
+}
+
+async function uploadProductImageFile(productId, file) {
+  const formData = new FormData();
+  formData.append("image", file);
+
+  const response = await Auth.fetchWithAuth(`${API_BASE_URL}/api/admin/products/${productId}/image`, {
+    method: "POST",
+    body: formData
+  });
+
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok) {
+    throw new Error(data.error || "No fue posible subir la imagen del producto");
+  }
+
+  return data.product;
+}
+
 async function loadDashboard() {
   const response = await Auth.fetchWithAuth(`${API_BASE_URL}/api/admin/dashboard`);
   if (!response.ok) {
@@ -82,6 +113,10 @@ async function loadProducts() {
 
 function renderAdminProducts(products) {
   const tbody = document.getElementById("adminProductsTable");
+  if (!tbody) {
+    return;
+  }
+
   tbody.innerHTML = "";
 
   if (!products.length) {
@@ -118,7 +153,12 @@ function renderAdminProducts(products) {
 }
 
 function filterAdminProducts() {
-  const term = document.getElementById("adminProductSearch").value.trim().toLowerCase();
+  const searchInput = document.getElementById("adminProductSearch");
+  if (!searchInput) {
+    return;
+  }
+
+  const term = searchInput.value.trim().toLowerCase();
   if (!term) {
     renderAdminProducts(adminProducts);
     return;
@@ -138,6 +178,7 @@ function resetProductForm() {
   document.getElementById("productForm").reset();
   document.getElementById("productId").value = "";
   document.getElementById("submitButton").textContent = "Guardar producto";
+  renderProductImagePreview("");
   clearFeedback();
 }
 
@@ -153,7 +194,10 @@ function editProduct(productId) {
   document.getElementById("productBarcode").value = product.codigo_barras || "";
   document.getElementById("productPrice").value = product.precio ?? "";
   document.getElementById("productStock").value = product.stock ?? "";
+  document.getElementById("productImageUrl").value = product.imagen_url || "";
+  document.getElementById("productImageFile").value = "";
   document.getElementById("submitButton").textContent = "Actualizar producto";
+  renderProductImagePreview(product.imagen_url || "");
   clearFeedback();
 }
 
@@ -166,6 +210,8 @@ async function submitProductForm(event) {
   const codigoBarras = document.getElementById("productBarcode").value.trim();
   const precio = Number(document.getElementById("productPrice").value);
   const stock = Number(document.getElementById("productStock").value);
+  const imagenUrl = document.getElementById("productImageUrl").value.trim();
+  const imageFile = document.getElementById("productImageFile").files[0];
 
   if (!nombre) {
     showFeedback("El nombre del producto es obligatorio", "error");
@@ -190,7 +236,8 @@ async function submitProductForm(event) {
     codigo_barras: codigoBarras,
     precio,
     stock,
-    stock_minimo: 5
+    stock_minimo: 5,
+    imagen_url: imagenUrl
   };
 
   const submitButton = document.getElementById("submitButton");
@@ -210,9 +257,14 @@ async function submitProductForm(event) {
       throw new Error(data.error || "No fue posible guardar el producto");
     }
 
+    let savedProduct = data.product || {};
+    if (imageFile && savedProduct.id) {
+      savedProduct = await uploadProductImageFile(savedProduct.id, imageFile);
+    }
+
+    renderProductImagePreview(savedProduct.imagen_url || imagenUrl || "");
     showFeedback(productId ? "Producto actualizado" : "Producto creado", "success");
     resetProductForm();
-    await loadProducts();
   } catch (error) {
     showFeedback(error.message || "No fue posible guardar el producto", "error");
   } finally {
@@ -236,7 +288,6 @@ async function deleteProduct(productId) {
     }
 
     UI.toast("Producto eliminado", "success");
-    await loadProducts();
   } catch (error) {
     UI.alert("Error", error.message || "No fue posible eliminar el producto");
   }
@@ -414,6 +465,32 @@ async function deleteUser(id) {
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
+  const imageUrlInput = document.getElementById("productImageUrl");
+  const imageFileInput = document.getElementById("productImageFile");
+
+  if (imageUrlInput) {
+    imageUrlInput.addEventListener("input", (event) => {
+      if (event.target.value.trim()) {
+        if (imageFileInput) imageFileInput.value = "";
+        renderProductImagePreview(event.target.value.trim());
+      } else if (!imageFileInput?.files?.length) {
+        renderProductImagePreview("");
+      }
+    });
+  }
+
+  if (imageFileInput) {
+    imageFileInput.addEventListener("change", (event) => {
+      const file = event.target.files?.[0];
+      if (!file) {
+        renderProductImagePreview(imageUrlInput?.value.trim() || "");
+        return;
+      }
+      const objectUrl = URL.createObjectURL(file);
+      renderProductImagePreview(objectUrl);
+    });
+  }
+
   const productForm = document.getElementById("productForm");
   if (productForm && !productForm.hasAttribute("onsubmit")) {
     productForm.addEventListener("submit", submitProductForm);
@@ -429,7 +506,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   await Promise.all([
     loadDashboard(),
     loadCategories(),
-    loadProducts(),
     loadUsers()
   ]);
 });

@@ -66,7 +66,7 @@
       margin: 0 auto;
       padding: 18px;
       display: grid;
-      grid-template-columns: 1.6fr .9fr;
+      grid-template-columns: 1.8fr .85fr;
       gap: 16px;
     }
 
@@ -113,7 +113,7 @@
 
     .filters {
       display: grid;
-      grid-template-columns: 2fr 1fr 1fr auto;
+      grid-template-columns: 2fr 1fr 1fr;
       gap: 10px;
       align-items: end;
     }
@@ -124,7 +124,16 @@
       flex-wrap: wrap;
     }
 
-    .sort-tools .btn {
+    
+
+    .inventory-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
+
+    .inventory-actions .btn {
       border-radius: 10px;
       font-size: 12px;
       font-weight: 700;
@@ -155,9 +164,10 @@
       vertical-align: middle;
     }
 
-    .table-wrap {
-      max-height: 560px;
-      overflow: auto;
+     .inventory-table-wrap {
+      max-height: 255px;
+      overflow-y: auto;
+      overflow-x: auto;
       border: 1px solid var(--line);
       border-radius: 12px;
     }
@@ -168,9 +178,81 @@
       gap: 16px;
     }
 
+    .selected-product-card .card-body {
+      display: grid;
+      grid-template-columns: 132px minmax(0, 1fr);
+      gap: 14px;
+      align-items: center;
+    }
+
+    .selected-product-image {
+      width: 132px;
+      height: 132px;
+      object-fit: contain;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      padding: 8px;
+      background: #ffffff;
+    }
+
+    .selected-product-name {
+      font-size: 18px;
+      font-weight: 800;
+      line-height: 1.1;
+    }
+
+    .selected-product-meta {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .selected-product-meta .meta-box {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 10px;
+      background: color-mix(in srgb, var(--panel) 88%, #eff6ff 12%);
+    }
+
+    .selected-product-meta .meta-label {
+      font-size: 11px;
+      color: #667085;
+      margin-bottom: 4px;
+    }
+
+    .selected-product-meta .meta-value {
+      font-size: 15px;
+      font-weight: 800;
+      line-height: 1.1;
+    }
+
+    
+
+    .selected-product-tools {
+      margin-top: 12px;
+      border-top: 1px solid var(--line);
+      padding-top: 12px;
+    }
+
+    .selected-product-tools .btn {
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .product-row {
+      cursor: pointer;
+    }
+
+    .product-row.is-selected {
+      background: rgba(59, 130, 246, 0.12);
+    }
+
     .movements-wrap {
-      max-height: 720px;
-      overflow: auto;
+      max-height: 300px;
+      overflow-y: auto;
+      overflow-x: auto;
       border: 1px solid var(--line);
       border-radius: 12px;
     }
@@ -333,10 +415,14 @@
                 <option value="out">Agotado</option>
               </select>
             </div>
-            <div>
-              <button class="btn btn-dark w-100" id="exportCsvBtn"><i class="bi bi-download me-1"></i>Exportar
-                CSV</button>
-            </div>
+          </div>
+
+          <div class="inventory-actions">
+            <button class="btn btn-dark" id="exportCsvBtn"><i class="bi bi-download me-1"></i>Exportar CSV</button>
+            <button class="btn btn-outline-success" id="downloadTemplateBtn"><i class="bi bi-file-earmark-excel me-1"></i>Descargar formato</button>
+            <button class="btn btn-outline-primary" id="importProductsBtn"><i class="bi bi-cloud-upload me-1"></i>Carga masiva</button>
+            <button class="btn btn-outline-secondary" id="printCountBtn"><i class="bi bi-printer me-1"></i>Imprimir conteo</button>
+            <input id="importProductsFile" type="file" class="d-none" accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
           </div>
 
           <div class="sort-tools mb-3">
@@ -349,7 +435,7 @@
             <button class="btn btn-outline-primary" data-sort="valor_inventario">Valor inventario</button>
           </div>
 
-          <div class="table-wrap">
+          <div class="inventory-table-wrap">
             <table class="table table-hover align-middle mb-0">
               <thead>
                 <tr>
@@ -373,6 +459,45 @@
     </div>
 
     <div class="panel-right">
+      <div class="card selected-product-card">
+        <div class="card-header">Producto seleccionado</div>
+        <div class="card-body">
+          <img id="selectedProductImage" class="selected-product-image" alt="Vista previa del producto seleccionado">
+          <div>
+            <div id="selectedProductName" class="selected-product-name">Selecciona un producto</div>
+            <div id="selectedProductCode" class="text-muted small mt-1">Haz clic en una fila para ver su imagen y resumen.</div>
+            <div class="selected-product-meta">
+              <div class="meta-box">
+                <div class="meta-label">Precio</div>
+                <div class="meta-value" id="selectedProductPrice">$0</div>
+              </div>
+              <div class="meta-box">
+                <div class="meta-label">Stock</div>
+                <div class="meta-value" id="selectedProductStock">0</div>
+              </div>
+              <div class="meta-box">
+                <div class="meta-label">Categoria</div>
+                <div class="meta-value" id="selectedProductCategory">-</div>
+              </div>
+              <div class="meta-box">
+                <div class="meta-label">Valor inventario</div>
+                <div class="meta-value" id="selectedProductValue">$0</div>
+              </div>
+            </div>
+            <div class="selected-product-tools">
+              <label class="form-label">URL de imagen</label>
+              <input id="selectedProductImageUrl" class="form-control" placeholder="https://servidor.com/imagen.jpg">
+              <div class="d-flex gap-2 flex-wrap mt-2">
+                <button class="btn btn-outline-primary" id="saveImageUrlBtn" type="button"><i class="bi bi-link-45deg me-1"></i>Guardar URL</button>
+                <button class="btn btn-outline-dark" id="uploadImageBtn" type="button"><i class="bi bi-image me-1"></i>Subir archivo</button>
+              </div>
+              <input id="selectedProductImageFile" type="file" class="form-control mt-2" accept="image/*">
+              <div class="text-muted small mt-2">Puedes usar una URL publica o subir una imagen local para el producto seleccionado.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div class="card" data-mode="simple">
         <div class="card-header">Modo simple</div>
         <div class="card-body">
@@ -506,4 +631,16 @@
 </body>
 
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
 

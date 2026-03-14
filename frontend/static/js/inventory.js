@@ -24,6 +24,38 @@ function money(value) {
   return "$" + Number(value || 0).toLocaleString("es-CO", { minimumFractionDigits: 2, maximumFractionDigits: 2 })
 }
 
+function buildPlaceholderImage(productName = "Producto") {
+  const safeName = String(productName || "Producto").trim()
+  const initials = safeName
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map(word => word[0].toUpperCase())
+    .join("") || "P"
+  const hue = safeName.split("").reduce((acc, char) => acc + char.charCodeAt(0), 0) % 360
+  const bgStart = `hsl(${hue}, 72%, 82%)`
+  const bgEnd = `hsl(${(hue + 28) % 360}, 78%, 70%)`
+  const svg = `
+    <svg xmlns="http://www.w3.org/2000/svg" width="420" height="420" viewBox="0 0 420 420">
+      <defs>
+        <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="${bgStart}"/>
+          <stop offset="100%" stop-color="${bgEnd}"/>
+        </linearGradient>
+      </defs>
+      <rect width="420" height="420" rx="38" fill="url(#g)"/>
+      <text x="50%" y="54%" dominant-baseline="middle" text-anchor="middle"
+        font-family="Segoe UI, Arial, sans-serif" font-size="132" font-weight="700" fill="#ffffff">${initials}</text>
+    </svg>
+  `.trim()
+  return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`
+}
+
+function resolveProductImage(product) {
+  const directImage = product?.imagen_url || product?.imagen || product?.image_url || product?.foto_url || product?.foto
+  return directImage || buildPlaceholderImage(product?.nombre)
+}
+
 function badgeForStatus(status) {
   if (status === "out") return '<span class="badge text-bg-danger">Agotado</span>'
   if (status === "low") return '<span class="badge text-bg-warning">Bajo</span>'
@@ -46,6 +78,15 @@ async function fetchJson(url, options = undefined) {
   }
 
   return data
+}
+
+function downloadBlob(blob, filename) {
+  const url = URL.createObjectURL(blob)
+  const link = document.createElement("a")
+  link.href = url
+  link.download = filename
+  link.click()
+  URL.revokeObjectURL(url)
 }
 
 function renderCategories() {
@@ -75,8 +116,9 @@ function renderTable() {
   }
 
   state.products.forEach((p) => {
+    const isSelected = state.selectedProduct?.id === p.id
     tbody.innerHTML += `
-      <tr>
+      <tr class="product-row ${isSelected ? "is-selected" : ""}" onclick="selectInventoryProduct(${p.id})">
         <td>#${p.id}</td>
         <td>
           <div class="fw-bold">${p.nombre}</div>
@@ -90,11 +132,64 @@ function renderTable() {
         <td>${money(p.inventory_value)}</td>
         <td>${p.units_sold_30d}</td>
         <td>
-          <button class="btn btn-sm btn-primary" onclick="openAdjustModal(${p.id})">Ajustar</button>
+          <button class="btn btn-sm btn-primary" onclick="event.stopPropagation(); openAdjustModal(${p.id})">Ajustar</button>
         </td>
       </tr>
     `
   })
+}
+
+function renderSelectedProduct() {
+  const image = document.getElementById("selectedProductImage")
+  const name = document.getElementById("selectedProductName")
+  const code = document.getElementById("selectedProductCode")
+  const price = document.getElementById("selectedProductPrice")
+  const stock = document.getElementById("selectedProductStock")
+  const category = document.getElementById("selectedProductCategory")
+  const value = document.getElementById("selectedProductValue")
+  const imageUrlInput = document.getElementById("selectedProductImageUrl")
+  const imageFileInput = document.getElementById("selectedProductImageFile")
+
+  if (!image || !name || !code || !price || !stock || !category || !value) {
+    return
+  }
+
+  if (!state.selectedProduct) {
+    image.src = buildPlaceholderImage("Producto")
+    image.alt = "Vista previa del producto seleccionado"
+    name.textContent = "Selecciona un producto"
+    code.textContent = "Haz clic en una fila para ver su imagen y resumen."
+    price.textContent = "$0"
+    stock.textContent = "0"
+    category.textContent = "-"
+    value.textContent = "$0"
+    if (imageUrlInput) imageUrlInput.value = ""
+    if (imageFileInput) imageFileInput.value = ""
+    return
+  }
+
+  const product = state.selectedProduct
+  image.src = resolveProductImage(product)
+  image.alt = `Imagen de ${product.nombre}`
+  name.textContent = product.nombre
+  code.textContent = `${product.codigo_barras || "Sin codigo"} - ID #${product.id}`
+  price.textContent = money(product.precio)
+  stock.textContent = String(product.stock)
+  category.textContent = product.categoria || "Sin categoria"
+  value.textContent = money(product.inventory_value)
+  if (imageUrlInput) imageUrlInput.value = product.imagen_url || ""
+  if (imageFileInput) imageFileInput.value = ""
+}
+
+function selectInventoryProduct(productId) {
+  const product = state.products.find(item => item.id === productId)
+  if (!product) {
+    return
+  }
+
+  state.selectedProduct = product
+  renderSelectedProduct()
+  renderTable()
 }
 
 function renderMovements() {
@@ -206,7 +301,13 @@ async function loadInventory() {
   const query = buildInventoryQuery()
   const data = await fetchJson(`${API_BASE_URL}/api/admin/inventory?${query}`)
   state.products = data.products || []
+  if (state.selectedProduct) {
+    state.selectedProduct = state.products.find(item => item.id === state.selectedProduct.id) || state.products[0] || null
+  } else {
+    state.selectedProduct = state.products[0] || null
+  }
   renderSummary(data.summary || {})
+  renderSelectedProduct()
   renderTable()
 }
 
@@ -240,6 +341,181 @@ async function refreshHighImpactWidgets() {
     loadExpiringBatches(),
     loadFinancialDashboard()
   ])
+}
+
+async function refreshInventoryScreen({ includeCategories = false } = {}) {
+  const tasks = [loadInventory(), loadMovements(), refreshHighImpactWidgets()]
+  if (includeCategories) {
+    tasks.unshift(loadCategories())
+  }
+  await Promise.all(tasks)
+}
+
+async function downloadInventoryTemplate() {
+  try {
+    const response = await Auth.fetchWithAuth(`${API_BASE_URL}/api/admin/products/import-template`)
+    if (!response.ok) {
+      const data = await response.json().catch(() => ({}))
+      throw new Error(data.error || "No fue posible descargar la plantilla")
+    }
+
+    const blob = await response.blob()
+    downloadBlob(blob, `plantilla_productos_${new Date().toISOString().slice(0, 10)}.xlsx`)
+    UI.toast("Plantilla Excel descargada", "success")
+  } catch (error) {
+    UI.alert("Error", error.message || "No fue posible descargar la plantilla")
+  }
+}
+
+async function importProductsFile(file) {
+  const formData = new FormData()
+  formData.append("file", file)
+
+  try {
+    const response = await Auth.fetchWithAuth(`${API_BASE_URL}/api/admin/products/import`, {
+      method: "POST",
+      body: formData,
+    })
+    const result = await response.json().catch(() => ({}))
+    if (!response.ok) {
+      throw new Error(result.error || "No fue posible importar el archivo")
+    }
+
+    await refreshInventoryScreen({ includeCategories: true })
+
+    const errors = result.summary?.errors || []
+    const message = [
+      `Creados: ${result.summary?.created || 0}`,
+      `Actualizados: ${result.summary?.updated || 0}`,
+      `Errores: ${errors.length}`,
+      errors.length ? "Primeros errores: " + errors.slice(0, 5).join(" | ") : "Archivo procesado correctamente"
+    ].join("\n")
+
+    UI.alert("Carga masiva completada", message, errors.length ? "warning" : "success")
+  } catch (error) {
+    UI.alert("Error", error.message || "No fue posible importar el archivo")
+  }
+}
+
+async function saveSelectedProductImageUrl() {
+  if (!state.selectedProduct) {
+    UI.toast("Selecciona un producto primero", "warning")
+    return
+  }
+
+  const imageUrlInput = document.getElementById("selectedProductImageUrl")
+  const image_url = imageUrlInput?.value.trim() || ""
+
+  try {
+    await fetchJson(`${API_BASE_URL}/api/admin/products/${state.selectedProduct.id}/image`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ image_url })
+    })
+    await refreshInventoryScreen()
+    UI.toast("Imagen actualizada", "success")
+  } catch (error) {
+    UI.alert("Error", error.message || "No fue posible actualizar la imagen")
+  }
+}
+
+async function uploadSelectedProductImage() {
+  if (!state.selectedProduct) {
+    UI.toast("Selecciona un producto primero", "warning")
+    return
+  }
+
+  const input = document.getElementById("selectedProductImageFile")
+  const file = input?.files?.[0]
+
+  if (!file) {
+    UI.toast("Selecciona un archivo de imagen", "warning")
+    return
+  }
+
+  const formData = new FormData()
+  formData.append("image", file)
+
+  try {
+    const response = await Auth.fetchWithAuth(`${API_BASE_URL}/api/admin/products/${state.selectedProduct.id}/image`, {
+      method: "POST",
+      body: formData,
+    })
+    const result = await response.json().catch(() => ({}))
+    if (!response.ok) {
+      throw new Error(result.error || "No fue posible subir la imagen")
+    }
+
+    await refreshInventoryScreen()
+    UI.toast("Imagen cargada correctamente", "success")
+  } catch (error) {
+    UI.alert("Error", error.message || "No fue posible subir la imagen")
+  }
+}
+
+function printPhysicalCountSheet() {
+  const rows = state.products.map(product => `
+    <tr>
+      <td>${product.id}</td>
+      <td>${product.nombre}</td>
+      <td>${product.categoria || "Sin categoria"}</td>
+      <td>${product.codigo_barras || "-"}</td>
+      <td>${product.stock}</td>
+      <td style="height:36px;"></td>
+      <td></td>
+    </tr>
+  `).join("")
+
+  const html = `
+    <html lang="es">
+      <head>
+        <title>Conteo fisico de inventario</title>
+        <style>
+          body { font-family: Arial, sans-serif; color: #111827; margin: 24px; }
+          h1 { margin: 0 0 6px; font-size: 22px; }
+          p { margin: 0 0 16px; color: #4b5563; }
+          table { width: 100%; border-collapse: collapse; }
+          th, td { border: 1px solid #cbd5e1; padding: 8px; font-size: 12px; text-align: left; }
+          th { background: #e2e8f0; text-transform: uppercase; letter-spacing: .04em; font-size: 11px; }
+          .sign { margin-top: 20px; display: flex; justify-content: space-between; gap: 24px; }
+          .sign div { width: 48%; border-top: 1px solid #94a3b8; padding-top: 8px; font-size: 12px; }
+        </style>
+      </head>
+      <body>
+        <h1>Conteo fisico de inventario</h1>
+        <p>Fecha: ${new Date().toLocaleString("es-CO")} | Referencias: ${state.products.length}</p>
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Producto</th>
+              <th>Categoria</th>
+              <th>Codigo</th>
+              <th>Stock sistema</th>
+              <th>Conteo fisico</th>
+              <th>Observaciones</th>
+            </tr>
+          </thead>
+          <tbody>${rows || '<tr><td colspan="7">No hay productos para imprimir.</td></tr>'}</tbody>
+        </table>
+        <div class="sign">
+          <div>Responsable del conteo</div>
+          <div>Verificacion</div>
+        </div>
+        <script>window.onload = () => window.print();</script>
+      </body>
+    </html>
+  `
+
+  const printWindow = window.open("", "_blank", "width=1100,height=800")
+  if (!printWindow) {
+    UI.alert("Error", "Tu navegador bloqueo la ventana de impresion")
+    return
+  }
+
+  printWindow.document.open()
+  printWindow.document.write(html)
+  printWindow.document.close()
 }
 
 function wireFilters() {
@@ -281,6 +557,23 @@ function wireFilters() {
       await loadInventory()
     })
   })
+
+  document.getElementById("downloadTemplateBtn")?.addEventListener("click", downloadInventoryTemplate)
+  document.getElementById("printCountBtn")?.addEventListener("click", printPhysicalCountSheet)
+  document.getElementById("saveImageUrlBtn")?.addEventListener("click", saveSelectedProductImageUrl)
+  document.getElementById("uploadImageBtn")?.addEventListener("click", uploadSelectedProductImage)
+
+  const importButton = document.getElementById("importProductsBtn")
+  const importInput = document.getElementById("importProductsFile")
+  if (importButton && importInput) {
+    importButton.addEventListener("click", () => importInput.click())
+    importInput.addEventListener("change", async (event) => {
+      const file = event.target.files?.[0]
+      if (!file) return
+      await importProductsFile(file)
+      event.target.value = ""
+    })
+  }
 }
 
 function openAdjustModal(productId) {
@@ -290,6 +583,8 @@ function openAdjustModal(productId) {
   }
 
   state.selectedProduct = product
+  renderSelectedProduct()
+  renderTable()
 
   document.getElementById("adjustProductName").textContent = `${product.nombre} (#${product.id})`
   document.getElementById("adjustCurrentStock").textContent = String(product.stock)
@@ -335,7 +630,7 @@ async function submitAdjustment(event) {
       modal.hide()
     }
 
-    await Promise.all([loadInventory(), loadMovements(), refreshHighImpactWidgets()])
+    await refreshInventoryScreen()
     UI.toast("Ajuste aplicado correctamente", "success")
   } catch (error) {
     UI.alert("Error", error.message || "No fue posible ajustar el inventario")
@@ -344,7 +639,7 @@ async function submitAdjustment(event) {
 
 function exportCurrentView() {
   const headers = [
-    "ID", "Nombre", "Categoria", "Codigo", "Stock", "Stock Minimo", "Estado", "Precio", "Valor Inventario", "Ventas 30d"
+    "ID", "Nombre", "Categoria", "Codigo", "Stock", "Stock Minimo", "Estado", "Precio", "Valor Inventario", "Ventas 30d", "Imagen URL"
   ]
 
   const rows = state.products.map(p => [
@@ -357,7 +652,8 @@ function exportCurrentView() {
     p.stock_status,
     p.precio,
     p.inventory_value,
-    p.units_sold_30d
+    p.units_sold_30d,
+    p.imagen_url || ""
   ])
 
   const csv = [headers, ...rows]
@@ -365,12 +661,7 @@ function exportCurrentView() {
     .join("\n")
 
   const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" })
-  const url = URL.createObjectURL(blob)
-  const link = document.createElement("a")
-  link.href = url
-  link.download = `inventario_${new Date().toISOString().slice(0, 10)}.csv`
-  link.click()
-  URL.revokeObjectURL(url)
+  downloadBlob(blob, `inventario_${new Date().toISOString().slice(0, 10)}.csv`)
 }
 
 async function initInventoryScreen() {
@@ -391,5 +682,5 @@ async function initInventoryScreen() {
 }
 
 window.openAdjustModal = openAdjustModal
+window.selectInventoryProduct = selectInventoryProduct
 initInventoryScreen()
-

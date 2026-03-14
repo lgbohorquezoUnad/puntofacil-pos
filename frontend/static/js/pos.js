@@ -21,6 +21,39 @@ function formatMoney(value) {
    return Number(value || 0).toFixed(2)
 }
 
+function buildPlaceholderImage(productName = "Producto") {
+   const safeName = String(productName || "Producto").trim()
+   const initials = safeName
+      .split(/\s+/)
+      .filter(Boolean)
+      .slice(0, 2)
+      .map(word => word[0].toUpperCase())
+      .join("") || "P"
+   const hue = safeName.split("").reduce((acc, char) => acc + char.charCodeAt(0), 0) % 360
+   const bgStart = `hsl(${hue}, 70%, 78%)`
+   const bgEnd = `hsl(${(hue + 35) % 360}, 75%, 68%)`
+   const svg = `
+      <svg xmlns="http://www.w3.org/2000/svg" width="320" height="220" viewBox="0 0 320 220">
+         <defs>
+            <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+               <stop offset="0%" stop-color="${bgStart}"/>
+               <stop offset="100%" stop-color="${bgEnd}"/>
+            </linearGradient>
+         </defs>
+         <rect width="320" height="220" rx="22" fill="url(#g)"/>
+         <text x="50%" y="54%" dominant-baseline="middle" text-anchor="middle"
+           font-family="Segoe UI, Arial, sans-serif" font-size="68" font-weight="700" fill="#ffffff">${initials}</text>
+      </svg>
+   `.trim()
+   return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`
+}
+
+function resolveProductImage(product) {
+   const directImage = product?.imagen_url || product?.imagen || product?.image_url || product?.foto_url || product?.foto
+   return directImage || buildPlaceholderImage(product?.nombre)
+}
+
+
 function updateSelectedPaymentUI() {
    const paymentStatus = document.getElementById("selectedPaymentStatus")
    const tiles = document.querySelectorAll(".payment-tile")
@@ -87,6 +120,9 @@ function renderProducts(products) {
       container.innerHTML += `
 <div class="card product-card" onclick="addToCart(${p.id},'${p.nombre}',${p.precio})">
 <div class="card-body">
+<div class="product-media">
+<img class="product-thumb" src="${resolveProductImage(p)}" alt="Imagen de ${p.nombre}">
+</div>
 <p class="product-name">${p.nombre}</p>
 <p class="product-stock">Stock: ${p.stock}</p>
 <p class="product-price">$${formatMoney(p.precio)}</p>
@@ -409,3 +445,10 @@ async function initPOS() {
 }
 
 initPOS()
+
+
+
+
+
+
+

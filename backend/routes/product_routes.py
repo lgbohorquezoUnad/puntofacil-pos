@@ -23,14 +23,18 @@ from controllers.inventory_controller import (
 from controllers.product_controller import (
     create_product_controller,
     delete_product_controller,
+    download_product_import_template_controller,
     get_admin_dashboard,
+    import_products_controller,
     list_categories,
     list_products,
     update_product_controller,
+    update_product_image_controller,
 )
 from controllers.sale_controller import get_sales_history
 
 product_bp = Blueprint("products", __name__)
+
 
 
 def init_product_routes(mysql):
@@ -54,9 +58,21 @@ def init_product_routes(mysql):
     def admin_create_product():
         return create_product_controller(mysql)
 
+    @product_bp.route("/api/admin/products/import-template", methods=["GET"])
+    def admin_products_import_template():
+        return download_product_import_template_controller(mysql)
+
+    @product_bp.route("/api/admin/products/import", methods=["POST"])
+    def admin_import_products():
+        return import_products_controller(mysql)
+
     @product_bp.route("/api/admin/products/<int:product_id>", methods=["PUT"])
     def admin_update_product(product_id):
         return update_product_controller(mysql, product_id)
+
+    @product_bp.route("/api/admin/products/<int:product_id>/image", methods=["POST", "PATCH"])
+    def admin_update_product_image(product_id):
+        return update_product_image_controller(mysql, product_id)
 
     @product_bp.route("/api/admin/products/<int:product_id>", methods=["DELETE"])
     def admin_delete_product(product_id):
@@ -127,5 +143,3 @@ def init_product_routes(mysql):
         return audit_logs_controller(mysql)
 
     return product_bp
-
-

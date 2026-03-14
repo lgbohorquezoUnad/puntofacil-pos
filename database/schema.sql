@@ -1,4 +1,4 @@
-﻿CREATE TABLE IF NOT EXISTS cajas (
+CREATE TABLE IF NOT EXISTS cajas (
     id INT AUTO_INCREMENT PRIMARY KEY,
     usuario_id INT NULL,
     monto_apertura DECIMAL(10,2) NOT NULL,
@@ -55,3 +55,4 @@ CREATE TABLE IF NOT EXISTS inventory_movements (
     INDEX idx_inventory_movements_fecha (fecha),
     FOREIGN KEY (producto_id) REFERENCES productos(id)
 );
+
